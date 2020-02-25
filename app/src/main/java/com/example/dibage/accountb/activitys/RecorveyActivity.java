@@ -361,7 +361,7 @@ public class RecorveyActivity extends AppCompatActivity {
     private void initData() {
         context = this;
         recordList.clear();
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/账号册子/";
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/出入库管家/";
         List<String> backups_paths = FileUtils.getDataByType(path, ".bkp");
         for (int i = 0; i < backups_paths.size(); i++) {
             File file = new File(backups_paths.get(i));

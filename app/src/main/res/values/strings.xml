@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">账号册子</string>
+    <string name="app_name">出入库管家</string>
     <string name="title_activity_main2">Leanback Main2Activity Title</string>
     <string name="browse_title"><![CDATA[Videos by Your Company]]></string>
     <string name="related_movies">Related Videos</string>

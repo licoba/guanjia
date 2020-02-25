@@ -147,10 +147,10 @@ public class DevelopActivity extends AppCompatActivity implements View.OnClickLi
 
             case R.id.btnShare:
                 intent=new Intent(Intent.ACTION_SEND);
-                intent.putExtra(Intent.EXTRA_TEXT,"账号册子：一个在本地记录、保存账号密码的App，增加了添加证件照的功能，保护个人隐私。    " +
+                intent.putExtra(Intent.EXTRA_TEXT,"出入库管家：一个在本地记录、保存账号密码的App，增加了添加证件照的功能，保护个人隐私。    " +
                         "https://github.com/SilenceStar/AccountB");
                 intent.setType("text/plain");
-                startActivity(Intent.createChooser(intent,"分享账号册子给朋友"));
+                startActivity(Intent.createChooser(intent,"分享出入库管家给朋友"));
 
                 break;
 
