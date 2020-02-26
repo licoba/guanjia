@@ -21,4 +21,9 @@
     <color name="gray_view">#E6E6E6</color>
     <color name="GrayDark">#8F8F8F</color>
     <color name="Red">#FF0000</color>
+    <color name="RedCard">#CC3333</color>
+    <color name="YellowCard">#FF9900</color>
+
+
+
 </resources>

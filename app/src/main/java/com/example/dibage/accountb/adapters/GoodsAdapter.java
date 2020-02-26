@@ -54,9 +54,9 @@ public class GoodsAdapter extends BaseQuickAdapter<Goods, BaseViewHolder>  {
 
 
         if(remain-sold<=0){
-
+            helper.setBackgroundRes(R.id.rootLayout, R.drawable.corners_card_red);
         }else if(remain-sold==1){
-
+            helper.setBackgroundRes(R.id.rootLayout, R.drawable.corners_card_yellow);
         }
 
     }

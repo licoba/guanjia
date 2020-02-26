@@ -95,15 +95,7 @@ public class MainActivity extends AppCompatActivity {
 //                } else return false;
 //            }
 //        });
-//        recyclerView.setOnItemLongClickListener(new myItemLongClickListener());
-        mGoodsAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-//                Toasty.info(MainActivity.this,"长按了",Toast.LENGTH_SHORT, false).show();
-                showPopupMenu(goodsList.get(position));
-                return false;
-            }
-        });
+
 
         mGoodsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -163,7 +155,6 @@ public class MainActivity extends AppCompatActivity {
         floatingActionMenu = findViewById(R.id.fabMenu);
         fabAddAccount = findViewById(R.id.fabAddAcount);
         fabAddIdCard = findViewById(R.id.fabAddIdCard);
-//        sideBar = findViewById(R.id.side_bar);
         recyclerView = findViewById(R.id.recyclerView);
         ll_empty = findViewById(R.id.ll_empty);
         toolbar = findViewById(R.id.toolbar);
@@ -177,29 +168,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setTitle("出入库管家");
         toolbar.setOnMenuItemClickListener((android.support.v7.widget.Toolbar.OnMenuItemClickListener) onMenuItemClick);
-        //自定义侧边索引
-//        sideBar.setIndexItems("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
-//                "W", "X", "Y", "Z", "#");
-//        sideBar.setOnSelectIndexItemListener(new WaveSideBar.OnSelectIndexItemListener() {
-//
-//            @Override
-//            public void onSelectIndexItem(String index) {
-//                Log.d("WaveSideBar", index);
-//                int location = 0;
-//                boolean flag = false;//如果没有匹配到值，那么界面就不动
-//                //
-//                for (int i = 0; i < accountsList.size(); i++) {
-//                    if (accountsList.get(i).getFirstchar().equals(index)) {
-//                        location = i;
-//                        flag = true;
-//                        break;
-//                    }
-//                }
-//                Log.d("Location:", location + "");
-//                if (flag)
-//                    listView.setSelection(location);
-//            }
-//        });
     }
 
 
