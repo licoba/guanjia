@@ -74,16 +74,17 @@
                     android:layout_width="2px"
                     android:background="@color/background_gray"
                     android:layout_height="match_parent"></LinearLayout>
+
                 <EditText
                     android:id="@+id/etName"
-                    android:layout_weight="8"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:hint="请输入名称"
-                    android:singleLine="true"
-                    android:textSize="16sp"
+                    android:layout_weight="8"
                     android:background="@null"
-                    android:layout_height="wrap_content" />
+                    android:hint="请输入名称或型号"
+                    android:singleLine="true"
+                    android:textSize="16sp" />
 
                 <ImageButton
                     android:id="@+id/btn_clear1"
@@ -108,6 +109,7 @@
 
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_gravity="center_vertical"
 
@@ -142,6 +144,62 @@
 
                 <ImageButton
                     android:id="@+id/btn_clear2"
+                    android:minHeight="10dp"
+                    android:minWidth="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:src="@mipmap/cancel"
+                    android:background="@null"
+                    />
+                <LinearLayout
+                    android:layout_width="2px"
+                    android:background="@color/background_gray"
+                    android:layout_height="match_parent"></LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="@color/background_gray"
+                android:layout_height="2px">
+
+
+            </LinearLayout>
+            <!--已售待出库数量-->
+            <LinearLayout
+                android:layout_gravity="center_vertical"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="2px"
+                    android:background="@color/background_gray"
+                    android:layout_height="match_parent"></LinearLayout>
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="3"
+                    android:textSize="16sp"
+                    android:text="待出库数"/>
+                <LinearLayout
+                    android:layout_width="2px"
+                    android:background="@color/background_gray"
+                    android:layout_height="match_parent"></LinearLayout>
+                <EditText
+                    android:id="@+id/etSold"
+                    android:layout_weight="8"
+                    android:layout_width="0dp"
+                    android:layout_marginLeft="10dp"
+                    android:hint="请输入已售待出库的数量"
+                    android:singleLine="true"
+                    android:textSize="16sp"
+                    android:background="@null"
+                    android:layout_height="wrap_content" />
+
+                <ImageButton
+                    android:id="@+id/btn_clear6"
                     android:minHeight="10dp"
                     android:minWidth="10dp"
                     android:layout_gravity="center_vertical"

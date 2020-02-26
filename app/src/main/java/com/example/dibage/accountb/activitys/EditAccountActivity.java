@@ -30,6 +30,7 @@ import com.example.dibage.accountb.utils.SimpleUtils;
 
 import es.dmoral.toasty.Toasty;
 
+//编辑库存
 public class EditAccountActivity extends AppCompatActivity implements View.OnClickListener{
 
     private ImageButton btn_clear1;
@@ -112,7 +113,7 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbar.setTitle("编辑账号");
+        toolbar.setTitle("编辑库存");
 
         et_description.setText(account.getDescription());
         et_username.setText(account.getUsername());

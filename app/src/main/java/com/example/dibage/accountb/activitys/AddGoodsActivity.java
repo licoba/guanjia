@@ -45,6 +45,7 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
 
     EditText et_name;
     EditText et_remain;
+    EditText et_sold;
     EditText et_category;
     EditText et_remarks;
     EditText et_price;
@@ -125,6 +126,7 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
         et_name = findViewById(R.id.etName);
         et_category = findViewById(R.id.etCategory);
         et_remain = findViewById(R.id.etRemain);
+        et_remain = findViewById(R.id.etSold);
         et_remarks = findViewById(R.id.etRemark);
         et_price = findViewById(R.id.etPrice);
         btn_Submit = findViewById(R.id.btnSubmit);
@@ -191,7 +193,7 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
     private void AddRecord(EditText et_nameg, EditText et_remain, EditText et_category, EditText et_remarks) {
         String name = SimpleUtils.getStrings(et_name);
         int remain = SimpleUtils.getInt(et_remain);
-        int sold = 0;
+        int sold = SimpleUtils.getInt(et_sold);
         String category = SimpleUtils.getStrings(et_category);
         float price = SimpleUtils.getFloat(et_price);
         String remark = SimpleUtils.getStrings(et_remarks);
@@ -217,6 +219,9 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
                 et_price.setText("");
             case R.id.btn_clear5:
                 et_remarks.setText("");
+                break;
+            case R.id.btn_clear6:
+                et_sold.setText("");
                 break;
             case R.id.btn_getRandom:
                 showPopRandom();
