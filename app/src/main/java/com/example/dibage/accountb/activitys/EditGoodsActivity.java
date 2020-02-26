@@ -2,8 +2,8 @@ package com.example.dibage.accountb.activitys;
 
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,8 +24,7 @@ import com.example.dibage.accountb.R;
 import com.example.dibage.accountb.applications.MyApplication;
 import com.example.dibage.accountb.dao.AccountDao;
 import com.example.dibage.accountb.dao.DaoSession;
-import com.example.dibage.accountb.entitys.Account;
-import com.example.dibage.accountb.utils.AccountUtils;
+import com.example.dibage.accountb.entitys.Goods;
 import com.example.dibage.accountb.utils.SimpleUtils;
 
 import es.dmoral.toasty.Toasty;
@@ -37,13 +36,16 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
     private ImageButton btn_clear2;
     private ImageButton btn_clear3;
     private ImageButton btn_clear4;
+    private ImageButton btn_clear5;
+    private ImageButton btn_clear6;
 
-    EditText et_description;
-    EditText et_username;
-    EditText et_password;
+    EditText et_name;
+    EditText et_remain;
+    EditText et_sold;
+    EditText et_category;
     EditText et_remarks;
+    EditText et_price;
     Button btn_Submit;
-    Button btn_getRandom;
     ListView listView;
 
     Toolbar toolbar;
@@ -64,8 +66,8 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
     private CheckBox checkBox3;
     private Button btn_cancel;
     private Button btn_copy;
-    private Account account;
-
+//    private Account account;
+    private Goods mGoods;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +82,7 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
     private void initData() {
         daoSession = ((MyApplication)getApplication()).getDaoSession();
         mAccountDao = daoSession.getAccountDao();
-        account = (Account) getIntent().getSerializableExtra("account_data");
+        mGoods = (Goods) getIntent().getSerializableExtra("account_data");
     }
 
     private void initEvent() {
@@ -88,26 +90,30 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
         btn_clear2.setOnClickListener(this);
         btn_clear3.setOnClickListener(this);
         btn_clear4.setOnClickListener(this);
+        btn_clear5.setOnClickListener(this);
+        btn_clear6.setOnClickListener(this);
         btn_Submit.setOnClickListener(clickListener);
-        btn_getRandom.setOnClickListener(this);
+
 
 
     }
 
     private void initView() {
-        et_description = findViewById(R.id.etName);
-        et_password = findViewById(R.id.etCategory);
-        et_username = findViewById(R.id.etRemain);
+        et_name = findViewById(R.id.etName);
+        et_category = findViewById(R.id.etCategory);
+        et_remain = findViewById(R.id.etRemain);
+        et_sold = findViewById(R.id.etSold);
         et_remarks = findViewById(R.id.etRemark);
         btn_Submit = findViewById(R.id.btnSubmit);
         btn_clear1 = findViewById(R.id.btn_clear1);
         btn_clear2 = findViewById(R.id.btn_clear2);
         btn_clear3 = findViewById(R.id.btn_clear3);
         btn_clear4 = findViewById(R.id.btn_clear4);
-
+        btn_clear5 = findViewById(R.id.btn_clear5);
+        btn_clear6 = findViewById(R.id.btn_clear6);
         toolbar = findViewById(R.id.toolbar);
         listView = findViewById(R.id.listview);
-        btn_getRandom = findViewById(R.id.btn_getRandom);
+
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -115,10 +121,10 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setTitle("编辑库存");
 
-        et_description.setText(account.getDescription());
-        et_username.setText(account.getUsername());
-        et_password.setText(account.getPassword());
-        et_remarks.setText(account.getRemark());
+        et_name.setText(mGoods.getName());
+        et_remain.setText(mGoods.getRemain()+"");
+        et_sold.setText(mGoods.getSold()+"");
+        et_category.setText(mGoods.getCategory());
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,8 +132,6 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
                 EditAccountActivity.this.finish();
             }
         });
-        ;
-
     }
 
     private View.OnClickListener clickListener = new View.OnClickListener() {
@@ -137,22 +141,21 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btnSubmit:
-                    if (SimpleUtils.isNotNull(et_description)){
-                        if (SimpleUtils.isNotNull(et_username)){
-                            if(SimpleUtils.isNotNull(et_password)) {
+                    if (SimpleUtils.isNotNull(et_name)){
+                        if (SimpleUtils.isNotNull(et_remain)){
+                            if(SimpleUtils.isNotNull(et_category)) {
                                 msg = "保存成功";
                                 VertifyState = true;
-
-                                ModifyRecord(et_description,et_username,et_password,et_remarks);
+                                ModifyRecord();
                                 EditAccountActivity.this.finish();
                             }
                             else
-                                msg="密码不能为空";
+                                msg="请填写产品种类";
                         }else
-                            msg = "账号不能为空";
+                            msg = "请填写库存数";
                     }
                     else
-                        msg="名称不能为空";
+                        msg="产品名称不能为空";
                     if (VertifyState)
                         Toasty.success(EditAccountActivity.this, msg, Toast.LENGTH_SHORT, true).show();
                     else
@@ -166,15 +169,15 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
     };
 
     //修改记录
-    private void ModifyRecord(EditText et_description, EditText et_username, EditText et_password, EditText et_remarks) {
+    private void ModifyRecord() {
 
-        String description = SimpleUtils.getStrings(et_description);
-        String username = SimpleUtils.getStrings(et_username);
-        String password = SimpleUtils.getStrings(et_password);
-        String remarks = SimpleUtils.getStrings(et_remarks);
-        String firstChar = AccountUtils.getFirstString(description);
-        Account account1 = new Account(account.getId(),description,username,password,remarks,firstChar);
-        mAccountDao.update(account1);
+//        String description = SimpleUtils.getStrings(et_description);
+//        String username = SimpleUtils.getStrings(et_username);
+//        String password = SimpleUtils.getStrings(et_password);
+//        String remarks = SimpleUtils.getStrings(et_remarks);
+//        String firstChar = AccountUtils.getFirstString(description);
+//        Account account1 = new Account(account.getId(),description,username,password,remarks,firstChar);
+//        mAccountDao.update(account1);
 
     }
 
@@ -182,16 +185,21 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_clear1:
-                et_description.setText("");
+                et_name.setText("");
                 break;
             case R.id.btn_clear2:
-                et_username.setText("");
+                et_remain.setText("");
                 break;
             case R.id.btn_clear3:
-                et_password.setText("");
+                et_category.setText("");
                 break;
             case R.id.btn_clear4:
+                et_price.setText("");
+            case R.id.btn_clear5:
                 et_remarks.setText("");
+                break;
+            case R.id.btn_clear6:
+                et_sold.setText("");
                 break;
             case R.id.btn_getRandom:
                 showPopRandom();
