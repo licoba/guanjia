@@ -23,20 +23,36 @@ public class Goods implements Serializable {
     @NotNull
     private int remain;//库存数量
     @NotNull
+    private int sold;//已售未出库数量
+    @NotNull
     private String category;//货物种类
     private float price;//价格
     private String remark;//描述
     private String firstchar;//名称的首字母
-    @Generated(hash = 1592749667)
-    public Goods(Long id, @NotNull String name, int remain, @NotNull String category, float price, String remark,
-            String firstchar) {
+    private String adddate;//添加日期
+    @Generated(hash = 614867072)
+    public Goods(Long id, @NotNull String name, int remain, int sold, @NotNull String category, float price, String remark,
+            String firstchar, String adddate) {
         this.id = id;
         this.name = name;
         this.remain = remain;
+        this.sold = sold;
         this.category = category;
         this.price = price;
         this.remark = remark;
         this.firstchar = firstchar;
+        this.adddate = adddate;
+    }
+
+    public Goods(String name, int remain, int sold, String category, float price, String remark, String firstchar, String adddate) {
+        this.name = name;
+        this.remain = remain;
+        this.sold = sold;
+        this.category = category;
+        this.price = price;
+        this.remark = remark;
+        this.firstchar = firstchar;
+        this.adddate = adddate;
     }
 
     public Goods(String name, int remain, String category, float price, String remark, String firstchar) {
@@ -47,6 +63,20 @@ public class Goods implements Serializable {
         this.remark = remark;
         this.firstchar = firstchar;
     }
+
+    @Override
+    public String toString() {
+        return "Goods{" +
+                "name='" + name + '\'' +
+                ", remain=" + remain +
+                ", category='" + category + '\'' +
+                ", price=" + price +
+                ", remark='" + remark + '\'' +
+                ", firstchar='" + firstchar + '\'' +
+                ", adddate='" + adddate + '\'' +
+                '}';
+    }
+
 
     @Generated(hash = 1770709345)
     public Goods() {
@@ -92,6 +122,22 @@ public class Goods implements Serializable {
     }
     public void setFirstchar(String firstchar) {
         this.firstchar = firstchar;
+    }
+
+    public String getAdddate() {
+        return this.adddate;
+    }
+
+    public void setAdddate(String adddate) {
+        this.adddate = adddate;
+    }
+
+    public int getSold() {
+        return this.sold;
+    }
+
+    public void setSold(int sold) {
+        this.sold = sold;
     }
 
 }

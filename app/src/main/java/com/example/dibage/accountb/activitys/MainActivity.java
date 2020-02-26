@@ -8,34 +8,35 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dibage.accountb.R;
 import com.example.dibage.accountb.adapters.AccountAdapter;
+import com.example.dibage.accountb.adapters.GoodsAdapter;
 import com.example.dibage.accountb.applications.MyApplication;
 import com.example.dibage.accountb.commonView.PopWindowTip;
 import com.example.dibage.accountb.dao.AccountDao;
 import com.example.dibage.accountb.dao.DaoSession;
+import com.example.dibage.accountb.dao.GoodsDao;
 import com.example.dibage.accountb.entitys.Account;
-import com.example.dibage.accountb.utils.AccountUtils;
+import com.example.dibage.accountb.entitys.Goods;
 import com.example.dibage.accountb.utils.UIUtils;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.gjiazhe.wavesidebar.WaveSideBar;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
@@ -54,17 +55,20 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionMenu floatingActionMenu;
     private FloatingActionButton fabAddAccount;
     private FloatingActionButton fabAddIdCard;
-    private WaveSideBar sideBar;
-    private ListView listView;
+//    private WaveSideBar sideBar;
+    private RecyclerView recyclerView;
     private Toolbar toolbar;
     private PopupWindow mPopWindow;
     private PopupWindow mPopTip;
     private LinearLayout ll_empty;
     List<Account> accountsList;
-    QueryBuilder<Account> qb;
+    List<Goods> goodsList;
+    QueryBuilder<Goods> qb;
     AccountAdapter accountAdapter;
+    GoodsAdapter mGoodsAdapter;
     DaoSession daoSession;
     AccountDao mAccountDao;
+    GoodsDao mGoodsDao;
 
     private float alpha = 1.0f;//初始值设为1，为不变暗
     private Handler mHandler;
@@ -72,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main2);
         initFBI();
         initData();
         initView();
@@ -80,20 +84,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initEvent() {
-        //监听Item的点击事件
-        listView.setOnItemClickListener(new myItemClickListener());
-        //监听ListView的触摸事件
-        listView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (floatingActionMenu.isOpened()) {
-                    floatingActionMenu.close(true);
-                    return true;
-                } else return false;
-            }
-        });
-
-        listView.setOnItemLongClickListener(new myItemLongClickListener());
+//        //监听Item的点击事件
+//        listView.setOnItemClickListener(new myItemClickListener());
+//        //监听ListView的触摸事件
+//        listView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                if (floatingActionMenu.isOpened()) {
+//                    floatingActionMenu.close(true);
+//                    return true;
+//                } else return false;
+//            }
+//        });
+//
+//        listView.setOnItemLongClickListener(new myItemLongClickListener());
         fabAddAccount.setOnClickListener(FablickListener);
         fabAddIdCard.setOnClickListener(FablickListener);
 
@@ -115,66 +119,69 @@ public class MainActivity extends AppCompatActivity {
     private void initData() {
         daoSession = ((MyApplication) getApplication()).getDaoSession();
         mAccountDao = daoSession.getAccountDao();
+        mGoodsDao = daoSession.getGoodsDao();
         //获取queryBuilder，通过queryBuilder来实现查询功能
         //mAccountDao.queryBuilder()表示查询所有，
         // orderAsc(AccountDao.Properties.Firstchar)表示按照首字母升序排序（#比A大，所以需要用函数重新排序）
-        qb = mAccountDao.queryBuilder().orderAsc(AccountDao.Properties.Firstchar, AccountDao.Properties.Username);
+//        qb = mAccountDao.queryBuilder().orderAsc(AccountDao.Properties.Firstchar, AccountDao.Properties.Username);
+        qb = mGoodsDao.queryBuilder().orderDesc(GoodsDao.Properties.Name, GoodsDao.Properties.Adddate);
         accountsList = new ArrayList<>();
-        accountsList.clear();
-        accountsList.addAll(AccountUtils.orderListAccount(qb.list()));
-        accountAdapter = new AccountAdapter(context, R.layout.item_listview, accountsList);
-        listView.setAdapter(accountAdapter);
-        accountAdapter.notifyDataSetChanged();
-
+        goodsList = new ArrayList<>();
+        goodsList.clear();
+        goodsList.addAll(qb.list());
+        Log.d("家具List：",goodsList.toString());
+        if (goodsList.size() > 0) {
+            ll_empty.setVisibility(View.GONE);
+        } else {
+            ll_empty.setVisibility(View.VISIBLE);
+        }
+        mGoodsAdapter = new GoodsAdapter(R.layout.item_goods,goodsList);
+        recyclerView.setAdapter(mGoodsAdapter);
+        if(mGoodsAdapter!=null)
+            mGoodsAdapter.notifyDataSetChanged();
     }
 
     private void initFBI() {
         floatingActionMenu = findViewById(R.id.fabMenu);
         fabAddAccount = findViewById(R.id.fabAddAcount);
         fabAddIdCard = findViewById(R.id.fabAddIdCard);
-        sideBar = findViewById(R.id.side_bar);
-        listView = findViewById(R.id.listview);
+//        sideBar = findViewById(R.id.side_bar);
+        recyclerView = findViewById(R.id.recyclerView);
         ll_empty = findViewById(R.id.ll_empty);
         toolbar = findViewById(R.id.toolbar);
     }
 
 
     public void initView() {
-
-        if (accountsList.size() > 0) {
-            ll_empty.setVisibility(View.GONE);
-            sideBar.setVisibility(View.VISIBLE);
-        } else {
-            sideBar.setVisibility(View.INVISIBLE);
-        }
-
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setTitle("出入库管家");
         toolbar.setOnMenuItemClickListener((android.support.v7.widget.Toolbar.OnMenuItemClickListener) onMenuItemClick);
         //自定义侧边索引
-        sideBar.setIndexItems("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
-                "W", "X", "Y", "Z", "#");
-        sideBar.setOnSelectIndexItemListener(new WaveSideBar.OnSelectIndexItemListener() {
-
-            @Override
-            public void onSelectIndexItem(String index) {
-                Log.d("WaveSideBar", index);
-                int location = 0;
-                boolean flag = false;//如果没有匹配到值，那么界面就不动
-                //
-                for (int i = 0; i < accountsList.size(); i++) {
-                    if (accountsList.get(i).getFirstchar().equals(index)) {
-                        location = i;
-                        flag = true;
-                        break;
-                    }
-                }
-                Log.d("Location:", location + "");
-                if (flag)
-                    listView.setSelection(location);
-            }
-        });
+//        sideBar.setIndexItems("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
+//                "W", "X", "Y", "Z", "#");
+//        sideBar.setOnSelectIndexItemListener(new WaveSideBar.OnSelectIndexItemListener() {
+//
+//            @Override
+//            public void onSelectIndexItem(String index) {
+//                Log.d("WaveSideBar", index);
+//                int location = 0;
+//                boolean flag = false;//如果没有匹配到值，那么界面就不动
+//                //
+//                for (int i = 0; i < accountsList.size(); i++) {
+//                    if (accountsList.get(i).getFirstchar().equals(index)) {
+//                        location = i;
+//                        flag = true;
+//                        break;
+//                    }
+//                }
+//                Log.d("Location:", location + "");
+//                if (flag)
+//                    listView.setSelection(location);
+//            }
+//        });
     }
 
 
@@ -190,17 +197,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {//每次onResume都会刷新一次数据
         super.onResume();
-        if (isPause) { //判断是否暂停
-            isPause = false;
-            initData();
+        Log.d("AAA","onResume了");
+        initData();
 
-            if (accountsList.size() > 0) {
-                ll_empty.setVisibility(View.GONE);
-                sideBar.setVisibility(View.VISIBLE);
-            } else {
-                sideBar.setVisibility(View.INVISIBLE);
-            }
-        }
     }
 
     public class myItemClickListener implements AdapterView.OnItemClickListener {
@@ -355,17 +354,17 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void clickConfirm() {
-                mAccountDao.delete(account);
-                accountsList.clear();
-                accountsList.addAll(qb.list());
-                accountsList = AccountUtils.orderListAccount(accountsList);
-                accountAdapter.notifyDataSetChanged();
+//                mAccountDao.delete(account);
+//                accountsList.clear();
+//                accountsList.addAll(qb.list());
+//                accountsList = AccountUtils.orderListAccount(accountsList);
+//                accountAdapter.notifyDataSetChanged();
                 if (accountsList.size() > 0) {
                     ll_empty.setVisibility(View.INVISIBLE);
-                    sideBar.setVisibility(View.VISIBLE);
+//                    sideBar.setVisibility(View.VISIBLE);
                 } else {
                     ll_empty.setVisibility(View.VISIBLE);
-                    sideBar.setVisibility(View.INVISIBLE);
+//                    sideBar.setVisibility(View.INVISIBLE);
                 }
                 Toasty.success(context, "删除成功", Toast.LENGTH_SHORT, false).show();
             }

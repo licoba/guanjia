@@ -27,10 +27,12 @@ public class GoodsDao extends AbstractDao<Goods, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Name = new Property(1, String.class, "name", false, "NAME");
         public final static Property Remain = new Property(2, int.class, "remain", false, "REMAIN");
-        public final static Property Category = new Property(3, String.class, "category", false, "CATEGORY");
-        public final static Property Price = new Property(4, float.class, "price", false, "PRICE");
-        public final static Property Remark = new Property(5, String.class, "remark", false, "REMARK");
-        public final static Property Firstchar = new Property(6, String.class, "firstchar", false, "FIRSTCHAR");
+        public final static Property Sold = new Property(3, int.class, "sold", false, "SOLD");
+        public final static Property Category = new Property(4, String.class, "category", false, "CATEGORY");
+        public final static Property Price = new Property(5, float.class, "price", false, "PRICE");
+        public final static Property Remark = new Property(6, String.class, "remark", false, "REMARK");
+        public final static Property Firstchar = new Property(7, String.class, "firstchar", false, "FIRSTCHAR");
+        public final static Property Adddate = new Property(8, String.class, "adddate", false, "ADDDATE");
     }
 
 
@@ -49,10 +51,12 @@ public class GoodsDao extends AbstractDao<Goods, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"NAME\" TEXT NOT NULL ," + // 1: name
                 "\"REMAIN\" INTEGER NOT NULL ," + // 2: remain
-                "\"CATEGORY\" TEXT NOT NULL ," + // 3: category
-                "\"PRICE\" REAL NOT NULL ," + // 4: price
-                "\"REMARK\" TEXT," + // 5: remark
-                "\"FIRSTCHAR\" TEXT);"); // 6: firstchar
+                "\"SOLD\" INTEGER NOT NULL ," + // 3: sold
+                "\"CATEGORY\" TEXT NOT NULL ," + // 4: category
+                "\"PRICE\" REAL NOT NULL ," + // 5: price
+                "\"REMARK\" TEXT," + // 6: remark
+                "\"FIRSTCHAR\" TEXT," + // 7: firstchar
+                "\"ADDDATE\" TEXT);"); // 8: adddate
     }
 
     /** Drops the underlying database table. */
@@ -71,17 +75,23 @@ public class GoodsDao extends AbstractDao<Goods, Long> {
         }
         stmt.bindString(2, entity.getName());
         stmt.bindLong(3, entity.getRemain());
-        stmt.bindString(4, entity.getCategory());
-        stmt.bindDouble(5, entity.getPrice());
+        stmt.bindLong(4, entity.getSold());
+        stmt.bindString(5, entity.getCategory());
+        stmt.bindDouble(6, entity.getPrice());
  
         String remark = entity.getRemark();
         if (remark != null) {
-            stmt.bindString(6, remark);
+            stmt.bindString(7, remark);
         }
  
         String firstchar = entity.getFirstchar();
         if (firstchar != null) {
-            stmt.bindString(7, firstchar);
+            stmt.bindString(8, firstchar);
+        }
+ 
+        String adddate = entity.getAdddate();
+        if (adddate != null) {
+            stmt.bindString(9, adddate);
         }
     }
 
@@ -95,17 +105,23 @@ public class GoodsDao extends AbstractDao<Goods, Long> {
         }
         stmt.bindString(2, entity.getName());
         stmt.bindLong(3, entity.getRemain());
-        stmt.bindString(4, entity.getCategory());
-        stmt.bindDouble(5, entity.getPrice());
+        stmt.bindLong(4, entity.getSold());
+        stmt.bindString(5, entity.getCategory());
+        stmt.bindDouble(6, entity.getPrice());
  
         String remark = entity.getRemark();
         if (remark != null) {
-            stmt.bindString(6, remark);
+            stmt.bindString(7, remark);
         }
  
         String firstchar = entity.getFirstchar();
         if (firstchar != null) {
-            stmt.bindString(7, firstchar);
+            stmt.bindString(8, firstchar);
+        }
+ 
+        String adddate = entity.getAdddate();
+        if (adddate != null) {
+            stmt.bindString(9, adddate);
         }
     }
 
@@ -120,10 +136,12 @@ public class GoodsDao extends AbstractDao<Goods, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // name
             cursor.getInt(offset + 2), // remain
-            cursor.getString(offset + 3), // category
-            cursor.getFloat(offset + 4), // price
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // remark
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // firstchar
+            cursor.getInt(offset + 3), // sold
+            cursor.getString(offset + 4), // category
+            cursor.getFloat(offset + 5), // price
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // remark
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // firstchar
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8) // adddate
         );
         return entity;
     }
@@ -133,10 +151,12 @@ public class GoodsDao extends AbstractDao<Goods, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setName(cursor.getString(offset + 1));
         entity.setRemain(cursor.getInt(offset + 2));
-        entity.setCategory(cursor.getString(offset + 3));
-        entity.setPrice(cursor.getFloat(offset + 4));
-        entity.setRemark(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setFirstchar(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setSold(cursor.getInt(offset + 3));
+        entity.setCategory(cursor.getString(offset + 4));
+        entity.setPrice(cursor.getFloat(offset + 5));
+        entity.setRemark(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setFirstchar(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setAdddate(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
      }
     
     @Override

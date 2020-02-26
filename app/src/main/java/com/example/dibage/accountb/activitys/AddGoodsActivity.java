@@ -29,6 +29,7 @@ import com.example.dibage.accountb.dao.DaoSession;
 import com.example.dibage.accountb.dao.GoodsDao;
 import com.example.dibage.accountb.entitys.Goods;
 import com.example.dibage.accountb.utils.AccountUtils;
+import com.example.dibage.accountb.utils.DateUtils;
 import com.example.dibage.accountb.utils.SimpleUtils;
 import com.example.dibage.accountb.utils.UIUtils;
 
@@ -164,7 +165,6 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
                             if(SimpleUtils.isNotNull(et_category)) {
                                 msg = "保存成功";
                                 VertifyState = true;
-
                                 AddRecord(et_name,et_remain,et_category,et_remarks);
                                 AddGoodsActivity.this.finish();
                             }
@@ -189,16 +189,16 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
 
     //向数据库添加一条记录
     private void AddRecord(EditText et_nameg, EditText et_remain, EditText et_category, EditText et_remarks) {
-
         String name = SimpleUtils.getStrings(et_name);
         int remain = SimpleUtils.getInt(et_remain);
+        int sold = 0;
         String category = SimpleUtils.getStrings(et_category);
-        float price = SimpleUtils.getFloat(et_category);
+        float price = SimpleUtils.getFloat(et_price);
         String remark = SimpleUtils.getStrings(et_remarks);
         String firstChar = AccountUtils.getFirstString(name);
-        Goods goods = new Goods(name,remain,category,price,remark,firstChar);
+        String adddate = DateUtils.getNowTimeString();
+        Goods goods = new Goods(name,remain,sold,category,price,remark,firstChar,adddate);
         mGoodsDao.insert(goods);
-
     }
 
     @Override
