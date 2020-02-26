@@ -26,24 +26,27 @@ import com.example.dibage.accountb.R;
 import com.example.dibage.accountb.applications.MyApplication;
 import com.example.dibage.accountb.dao.AccountDao;
 import com.example.dibage.accountb.dao.DaoSession;
-import com.example.dibage.accountb.entitys.Account;
+import com.example.dibage.accountb.dao.GoodsDao;
+import com.example.dibage.accountb.entitys.Goods;
 import com.example.dibage.accountb.utils.AccountUtils;
 import com.example.dibage.accountb.utils.SimpleUtils;
 import com.example.dibage.accountb.utils.UIUtils;
 
 import es.dmoral.toasty.Toasty;
 
-public class AddAccountActivity extends AppCompatActivity implements View.OnClickListener{
+public class AddGoodsActivity extends AppCompatActivity implements View.OnClickListener{
 
     private ImageButton btn_clear1;
     private ImageButton btn_clear2;
     private ImageButton btn_clear3;
     private ImageButton btn_clear4;
+    private ImageButton btn_clear5;
 
-    EditText et_description;
-    EditText et_username;
-    EditText et_password;
+    EditText et_name;
+    EditText et_remain;
+    EditText et_category;
     EditText et_remarks;
+    EditText et_price;
     Button btn_Submit;
     Button btn_getRandom;
     ListView listView;
@@ -51,6 +54,7 @@ public class AddAccountActivity extends AppCompatActivity implements View.OnClic
     Toolbar toolbar;
     DaoSession daoSession ;
     AccountDao mAccountDao;
+    GoodsDao mGoodsDao;
     private PopupWindow mPopupWindow;
 
     int length = 12;
@@ -85,7 +89,8 @@ public class AddAccountActivity extends AppCompatActivity implements View.OnClic
 
     private void initData() {
         daoSession = ((MyApplication)getApplication()).getDaoSession();
-        mAccountDao = daoSession.getAccountDao();
+//        mAccountDao = daoSession.getAccountDao();
+        mGoodsDao = daoSession.getGoodsDao();
 
     }
 
@@ -94,6 +99,7 @@ public class AddAccountActivity extends AppCompatActivity implements View.OnClic
         btn_clear2.setOnClickListener(this);
         btn_clear3.setOnClickListener(this);
         btn_clear4.setOnClickListener(this);
+        btn_clear5.setOnClickListener(this);
         btn_Submit.setOnClickListener(clickListener);
         btn_getRandom.setOnClickListener(this);
 
@@ -105,7 +111,7 @@ public class AddAccountActivity extends AppCompatActivity implements View.OnClic
                 switch (msg.what){
                     case 1:
                         //backgroundAlpha((float)msg.obj);
-                        UIUtils.darkenBackgroud(AddAccountActivity.this, (float)msg.obj);
+                        UIUtils.darkenBackgroud(AddGoodsActivity.this, (float)msg.obj);
                         break;
                 }
             }
@@ -115,16 +121,17 @@ public class AddAccountActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void initView() {
-        et_description = findViewById(R.id.etDescription);
-        et_password = findViewById(R.id.etPassword);
-        et_username = findViewById(R.id.etUsername);
+        et_name = findViewById(R.id.etName);
+        et_category = findViewById(R.id.etCategory);
+        et_remain = findViewById(R.id.etRemain);
         et_remarks = findViewById(R.id.etRemark);
+        et_price = findViewById(R.id.etPrice);
         btn_Submit = findViewById(R.id.btnSubmit);
         btn_clear1 = findViewById(R.id.btn_clear1);
         btn_clear2 = findViewById(R.id.btn_clear2);
         btn_clear3 = findViewById(R.id.btn_clear3);
         btn_clear4 = findViewById(R.id.btn_clear4);
-
+        btn_clear5 = findViewById(R.id.btn_clear5);
         toolbar = findViewById(R.id.toolbar);
         listView = findViewById(R.id.listview);
         btn_getRandom = findViewById(R.id.btn_getRandom);
@@ -138,7 +145,7 @@ public class AddAccountActivity extends AppCompatActivity implements View.OnClic
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddAccountActivity.this.finish();
+                AddGoodsActivity.this.finish();
             }
         });
 ;
@@ -152,44 +159,45 @@ public class AddAccountActivity extends AppCompatActivity implements View.OnClic
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btnSubmit:
-                    if (SimpleUtils.isNotNull(et_description)){
-                        if (SimpleUtils.isNotNull(et_username)){
-                            if(SimpleUtils.isNotNull(et_password)) {
+                    if (SimpleUtils.isNotNull(et_name)){
+                        if (SimpleUtils.isNotNull(et_remain)){
+                            if(SimpleUtils.isNotNull(et_category)) {
                                 msg = "保存成功";
                                 VertifyState = true;
 
-                                AddRecord(et_description,et_username,et_password,et_remarks);
-                                AddAccountActivity.this.finish();
+                                AddRecord(et_name,et_remain,et_category,et_remarks);
+                                AddGoodsActivity.this.finish();
                             }
                             else
-                                msg="密码不能为空";
+                                msg="请填写产品种类";
                         }else
-                            msg = "账号不能为空";
+                            msg = "请填写库存数";
                     }
                     else
-                        msg="名称不能为空";
+                        msg="产品名称不能为空";
                     if (VertifyState)
-                    Toasty.success(AddAccountActivity.this, msg, Toast.LENGTH_SHORT, true).show();
+                        Toasty.success(AddGoodsActivity.this, msg, Toast.LENGTH_SHORT, true).show();
                     else
-                        Toasty.warning(AddAccountActivity.this, msg, Toast.LENGTH_SHORT, true).show();
+                        Toasty.warning(AddGoodsActivity.this, msg, Toast.LENGTH_SHORT, true).show();
                     break;
                 default:
-                    Toasty.warning(AddAccountActivity.this, msg, Toast.LENGTH_SHORT, true).show();
+                    Toasty.warning(AddGoodsActivity.this, msg, Toast.LENGTH_SHORT, true).show();
 
             }
         }
     };
 
     //向数据库添加一条记录
-    private void AddRecord(EditText et_description, EditText et_username, EditText et_password, EditText et_remarks) {
+    private void AddRecord(EditText et_nameg, EditText et_remain, EditText et_category, EditText et_remarks) {
 
-        String description = SimpleUtils.getStrings(et_description);
-        String username = SimpleUtils.getStrings(et_username);
-        String password = SimpleUtils.getStrings(et_password);
-        String remarks = SimpleUtils.getStrings(et_remarks);
-        String firstChar = AccountUtils.getFirstString(description);
-        Account account = new Account(description,username,password,remarks,firstChar);
-        mAccountDao.insert(account);
+        String name = SimpleUtils.getStrings(et_name);
+        int remain = SimpleUtils.getInt(et_remain);
+        String category = SimpleUtils.getStrings(et_category);
+        float price = SimpleUtils.getFloat(et_category);
+        String remark = SimpleUtils.getStrings(et_remarks);
+        String firstChar = AccountUtils.getFirstString(name);
+        Goods goods = new Goods(name,remain,category,price,remark,firstChar);
+        mGoodsDao.insert(goods);
 
     }
 
@@ -197,15 +205,17 @@ public class AddAccountActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_clear1:
-                et_description.setText("");
+                et_name.setText("");
                 break;
             case R.id.btn_clear2:
-                et_username.setText("");
+                et_remain.setText("");
                 break;
             case R.id.btn_clear3:
-                et_password.setText("");
+                et_category.setText("");
                 break;
             case R.id.btn_clear4:
+                et_price.setText("");
+            case R.id.btn_clear5:
                 et_remarks.setText("");
                 break;
             case R.id.btn_getRandom:
@@ -217,8 +227,8 @@ public class AddAccountActivity extends AppCompatActivity implements View.OnClic
     private void showPopRandom() {
         mPopupWindow = new PopupWindow();
         LayoutInflater inflater = getLayoutInflater();
-        View contentView = inflater.from(AddAccountActivity.this).inflate(R.layout.pop_random, null);
-        View rootview = inflater.from(AddAccountActivity.this). inflate(R.layout.activity_add_account, null);
+        View contentView = inflater.from(AddGoodsActivity.this).inflate(R.layout.pop_random, null);
+        View rootview = inflater.from(AddGoodsActivity.this). inflate(R.layout.activity_add_account, null);
         mPopupWindow = new PopupWindow(contentView,
                 getWindowManager().getDefaultDisplay().getWidth() - 200, WindowManager.LayoutParams.WRAP_CONTENT, true);
         mPopupWindow.showAtLocation(rootview, Gravity.CENTER, 0, 0);
@@ -262,19 +272,19 @@ public class AddAccountActivity extends AppCompatActivity implements View.OnClic
         btn_copy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                et_password.setText(tv_pwd_random.getText());
+                et_category.setText(tv_pwd_random.getText());
                 ClipboardManager cmb = (ClipboardManager) getApplicationContext()
                         .getSystemService(Context.CLIPBOARD_SERVICE);
                 cmb.setText(tv_pwd_random.getText());
                 mPopupWindow.dismiss();
-                Toasty.success(AddAccountActivity.this, "已复制："+tv_pwd_random.getText(), Toast.LENGTH_SHORT, false).show();
+                Toasty.success(AddGoodsActivity.this, "已复制："+tv_pwd_random.getText(), Toast.LENGTH_SHORT, false).show();
             }
         });
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                //Toasty.info(AddAccountActivity.this,progress+"").show();
+                //Toasty.info(AddGoodsActivity.this,progress+"").show();
                 length = progress+4;
                 tv_length.setText("["+length+"]");
             }

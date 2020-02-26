@@ -382,7 +382,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent;
             switch (v.getId()) {
                 case R.id.fabAddAcount:
-                    intent = new Intent(context, AddAccountActivity.class);
+                    intent = new Intent(context, AddGoodsActivity.class);
                     startActivityForResult(intent,ADD_ACCOUNT);
                     floatingActionMenu.close(true);
                     break;

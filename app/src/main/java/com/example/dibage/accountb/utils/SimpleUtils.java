@@ -15,18 +15,37 @@ public class SimpleUtils {
 
     public static String DEFAULT_KEY = "dibage";
     public static boolean isNotNull(EditText et) {
-
-
         if(TextUtils.isEmpty(et.getText().toString().trim()))//如果是空的返回false
             return false;
         else
             return true;
-
     }
 
     //获取输入框字符串
     public static String getStrings(EditText et){
         return(et.getText().toString().trim());
+    }
+
+    //获取输入框数字
+    public static int getInt(EditText et){
+        String numString = et.getText().toString().trim();
+        if(TextUtils.isEmpty(numString))
+            return 0;
+        else {
+            int num = Integer.parseInt(numString);
+            return num;
+        }
+    }
+
+    //获取输入框数字
+    public static float getFloat(EditText et){
+        String numString = et.getText().toString().trim();
+        if(TextUtils.isEmpty(numString))
+            return 0.0f;
+        else {
+            float num = Float.parseFloat(numString);
+            return num;
+        }
     }
 
     //获取一个完全随机  并且唯一的文件名

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.dibage.accountb.activitys.AddAccountActivity">
+    tools:context="com.example.dibage.accountb.activitys.AddGoodsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -69,13 +69,13 @@
                     android:layout_height="50dp"
                     android:layout_weight="3"
                     android:textSize="16sp"
-                    android:text="名称"/>
+                    android:text="产品名称"/>
                 <LinearLayout
                     android:layout_width="2px"
                     android:background="@color/background_gray"
                     android:layout_height="match_parent"></LinearLayout>
                 <EditText
-                    android:id="@+id/etDescription"
+                    android:id="@+id/etName"
                     android:layout_weight="8"
                     android:layout_width="0dp"
                     android:layout_marginLeft="10dp"
@@ -124,17 +124,17 @@
                     android:layout_height="50dp"
                     android:layout_weight="3"
                     android:textSize="16sp"
-                    android:text="账号"/>
+                    android:text="库存数量"/>
                 <LinearLayout
                     android:layout_width="2px"
                     android:background="@color/background_gray"
                     android:layout_height="match_parent"></LinearLayout>
                 <EditText
-                    android:id="@+id/etUsername"
+                    android:id="@+id/etRemain"
                     android:layout_weight="8"
                     android:layout_width="0dp"
                     android:layout_marginLeft="10dp"
-                    android:hint="请输入账号"
+                    android:hint="请输入产品的库存量"
                     android:singleLine="true"
                     android:textSize="16sp"
                     android:background="@null"
@@ -179,17 +179,17 @@
                     android:layout_height="50dp"
                     android:layout_weight="3"
                     android:textSize="16sp"
-                    android:text="密码"/>
+                    android:text="产品种类"/>
                 <LinearLayout
                     android:layout_width="2px"
                     android:background="@color/background_gray"
                     android:layout_height="match_parent"></LinearLayout>
                 <EditText
-                    android:id="@+id/etPassword"
+                    android:id="@+id/etCategory"
                     android:layout_weight="8"
                     android:layout_width="0dp"
                     android:layout_marginLeft="10dp"
-                    android:hint="请输入密码"
+                    android:hint="沙发、床、橱柜等等"
                     android:singleLine="true"
                     android:textSize="16sp"
                     android:background="@null"
@@ -215,9 +215,62 @@
                 android:layout_width="match_parent"
                 android:background="@color/background_gray"
                 android:layout_height="2px">
-
-
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_gravity="center_vertical"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="2px"
+                    android:background="@color/background_gray"
+                    android:layout_height="match_parent"></LinearLayout>
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="3"
+                    android:textSize="16sp"
+                    android:text="产品价格"/>
+                <LinearLayout
+                    android:layout_width="2px"
+                    android:background="@color/background_gray"
+                    android:layout_height="match_parent"></LinearLayout>
+                <EditText
+                    android:id="@+id/etPrice"
+                    android:layout_weight="8"
+                    android:layout_width="0dp"
+                    android:layout_marginLeft="10dp"
+                    android:hint="(可选填)"
+                    android:singleLine="true"
+                    android:textSize="16sp"
+                    android:background="@null"
+                    android:layout_height="wrap_content" />
+
+                <ImageButton
+                    android:id="@+id/btn_clear4"
+                    android:minHeight="10dp"
+                    android:minWidth="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:src="@mipmap/cancel"
+                    android:background="@null"
+                    />
+                <LinearLayout
+                    android:layout_width="2px"
+                    android:background="@color/background_gray"
+                    android:layout_height="match_parent"></LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="@color/background_gray"
+                android:layout_height="2px">
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_gravity="center_vertical"
 
@@ -244,14 +297,14 @@
                     android:layout_weight="8"
                     android:layout_width="0dp"
                     android:layout_marginLeft="10dp"
-                    android:hint="(可不填)"
+                    android:hint="(可选填)"
                     android:singleLine="true"
                     android:textSize="16sp"
                     android:background="@null"
                     android:layout_height="wrap_content" />
 
                 <ImageButton
-                    android:id="@+id/btn_clear4"
+                    android:id="@+id/btn_clear5"
                     android:minHeight="10dp"
                     android:minWidth="10dp"
                     android:layout_gravity="center_vertical"
@@ -274,6 +327,8 @@
             </LinearLayout>
 
             <Button
+
+                android:visibility="gone"
                 android:id="@+id/btn_getRandom"
                 android:layout_marginTop="20dp"
                 android:text="生成随机密码"

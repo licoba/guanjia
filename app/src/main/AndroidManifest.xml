@@ -25,7 +25,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activitys.MainActivity" />
         <activity
-            android:name=".activitys.AddAccountActivity"
+            android:name=".activitys.AddGoodsActivity"
             android:windowSoftInputMode="stateVisible|adjustPan" />
         <activity android:name=".activitys.MoreActivity" />
         <activity android:name=".activitys.ValidateActivity" />
