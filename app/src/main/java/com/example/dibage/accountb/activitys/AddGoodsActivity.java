@@ -127,16 +127,17 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
         et_name = findViewById(R.id.etName);
         et_category = findViewById(R.id.etCategory);
         et_remain = findViewById(R.id.etRemain);
-        et_remain = findViewById(R.id.etSold);
+        et_sold = findViewById(R.id.etSold);
         et_remarks = findViewById(R.id.etRemark);
         et_price = findViewById(R.id.etPrice);
+
         btn_Submit = findViewById(R.id.btnSubmit);
         btn_clear1 = findViewById(R.id.btn_clear1);
         btn_clear2 = findViewById(R.id.btn_clear2);
         btn_clear3 = findViewById(R.id.btn_clear3);
         btn_clear4 = findViewById(R.id.btn_clear4);
         btn_clear5 = findViewById(R.id.btn_clear5);
-        btn_clear5 = findViewById(R.id.btn_clear6);
+        btn_clear6 = findViewById(R.id.btn_clear6);
         toolbar = findViewById(R.id.toolbar);
         listView = findViewById(R.id.listview);
         btn_getRandom = findViewById(R.id.btn_getRandom);

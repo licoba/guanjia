@@ -68,7 +68,6 @@ public class EditGoodsActivity extends AppCompatActivity implements View.OnClick
     private CheckBox checkBox3;
     private Button btn_cancel;
     private Button btn_copy;
-//    private Account account;
     private Goods mGoods;
 
     @Override
@@ -122,7 +121,7 @@ public class EditGoodsActivity extends AppCompatActivity implements View.OnClick
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbar.setTitle("编辑库存");
+        toolbar.setTitle("商品库存详情");
 
         et_name.setText(mGoods.getName());
         et_remain.setText(mGoods.getRemain()+"");

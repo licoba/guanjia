@@ -18,11 +18,12 @@
         android:layout_height="wrap_content">
 
     <ImageView
+        android:id="@+id/goods_image"
         android:layout_marginLeft="16dp"
         android:layout_gravity="center_vertical|left"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:src="@mipmap/credit_card"
+        android:src="@mipmap/jiaju"
         />
 
         <TextView
@@ -92,6 +93,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:text="详情 >"
+            android:visibility="invisible"
             />
 
     </LinearLayout>

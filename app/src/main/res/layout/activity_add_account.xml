@@ -106,9 +106,63 @@
                 android:layout_width="match_parent"
                 android:background="@color/background_gray"
                 android:layout_height="2px">
-
-
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_gravity="center_vertical"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="2px"
+                    android:background="@color/background_gray"
+                    android:layout_height="match_parent"></LinearLayout>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:text="种类规格"
+                    android:textSize="16sp" />
+                <LinearLayout
+                    android:layout_width="2px"
+                    android:background="@color/background_gray"
+                    android:layout_height="match_parent"></LinearLayout>
+                <EditText
+                    android:id="@+id/etCategory"
+                    android:layout_weight="8"
+                    android:layout_width="0dp"
+                    android:layout_marginLeft="10dp"
+                    android:hint="请输入产品的种类及规格"
+                    android:singleLine="true"
+                    android:textSize="16sp"
+                    android:background="@null"
+                    android:layout_height="wrap_content" />
+
+                <ImageButton
+                    android:id="@+id/btn_clear3"
+                    android:minHeight="10dp"
+                    android:minWidth="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:src="@mipmap/cancel"
+                    android:background="@null"
+                    />
+                <LinearLayout
+                    android:layout_width="2px"
+                    android:background="@color/background_gray"
+                    android:layout_height="match_parent"></LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="@color/background_gray"
+                android:layout_height="2px">
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_gravity="center_vertical"
@@ -220,59 +274,6 @@
                 android:layout_height="2px">
 
 
-            </LinearLayout>
-            <LinearLayout
-                android:layout_gravity="center_vertical"
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <LinearLayout
-                    android:layout_width="2px"
-                    android:background="@color/background_gray"
-                    android:layout_height="match_parent"></LinearLayout>
-                <TextView
-                    android:gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="3"
-                    android:textSize="16sp"
-                    android:text="产品种类"/>
-                <LinearLayout
-                    android:layout_width="2px"
-                    android:background="@color/background_gray"
-                    android:layout_height="match_parent"></LinearLayout>
-                <EditText
-                    android:id="@+id/etCategory"
-                    android:layout_weight="8"
-                    android:layout_width="0dp"
-                    android:layout_marginLeft="10dp"
-                    android:hint="沙发、床、橱柜等等"
-                    android:singleLine="true"
-                    android:textSize="16sp"
-                    android:background="@null"
-                    android:layout_height="wrap_content" />
-
-                <ImageButton
-                    android:id="@+id/btn_clear3"
-                    android:minHeight="10dp"
-                    android:minWidth="10dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:src="@mipmap/cancel"
-                    android:background="@null"
-                    />
-                <LinearLayout
-                    android:layout_width="2px"
-                    android:background="@color/background_gray"
-                    android:layout_height="match_parent"></LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:background="@color/background_gray"
-                android:layout_height="2px">
             </LinearLayout>
 
             <LinearLayout

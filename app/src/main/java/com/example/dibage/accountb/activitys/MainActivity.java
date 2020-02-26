@@ -108,7 +108,10 @@ public class MainActivity extends AppCompatActivity {
         mGoodsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-
+                Intent intent = new Intent(MainActivity.this, EditGoodsActivity.class);
+                intent.putExtra("account_data", (goodsList.get(position)));
+                startActivity(intent);
+//                mPopWindow.dismiss();
             }
         });
         fabAddAccount.setOnClickListener(FablickListener);

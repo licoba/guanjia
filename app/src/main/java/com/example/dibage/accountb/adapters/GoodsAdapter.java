@@ -26,8 +26,38 @@ public class GoodsAdapter extends BaseQuickAdapter<Goods, BaseViewHolder>  {
         String category = goods.getCategory();
 
         helper.setText(R.id.goods_name,name)
-                .setText(R.id.goods_remain,"可售:"+(remain-sold)+"件")
+                .setText(R.id.goods_remain,"可售："+(remain-sold)+" 件")
                 .setText(R.id.goods_category,category);
+
+        if(category.contains("沙发")){
+            helper.setImageResource(R.id.goods_image,R.mipmap.shafa);
+        }else if(category.contains("床")||category.contains("垫")||category.contains("席梦思")){
+            helper.setImageResource(R.id.goods_image,R.mipmap.chuang);
+        }else if(category.contains("茶几")){
+            helper.setImageResource(R.id.goods_image,R.mipmap.chaji);
+        }else if(category.contains("电视柜")){
+            helper.setImageResource(R.id.goods_image,R.mipmap.dianshigui);
+        }else if(category.contains("衣柜")){
+            helper.setImageResource(R.id.goods_image,R.mipmap.yigui);
+        }else if(category.contains("妆")){
+            helper.setImageResource(R.id.goods_image,R.mipmap.shuzhuangtai);
+        }else if(category.contains("餐桌")){
+            helper.setImageResource(R.id.goods_image,R.mipmap.canzhuo);
+        }else if(category.contains("柜")){
+            helper.setImageResource(R.id.goods_image,R.mipmap.gui);
+        }else if(category.contains("椅")){
+            helper.setImageResource(R.id.goods_image,R.mipmap.yizi);
+        }else{
+            helper.setImageResource(R.id.goods_image,R.mipmap.jiaju);
+        }
+
+
+
+        if(remain-sold<=0){
+
+        }else if(remain-sold==1){
+
+        }
 
     }
 }
