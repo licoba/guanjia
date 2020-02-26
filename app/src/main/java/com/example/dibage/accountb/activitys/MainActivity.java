@@ -24,8 +24,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.dibage.accountb.R;
-import com.example.dibage.accountb.adapters.AccountAdapter;
 import com.example.dibage.accountb.adapters.GoodsAdapter;
 import com.example.dibage.accountb.applications.MyApplication;
 import com.example.dibage.accountb.commonView.PopWindowTip;
@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
     List<Account> accountsList;
     List<Goods> goodsList;
     QueryBuilder<Goods> qb;
-    AccountAdapter accountAdapter;
     GoodsAdapter mGoodsAdapter;
     DaoSession daoSession;
     AccountDao mAccountDao;
@@ -96,8 +95,22 @@ public class MainActivity extends AppCompatActivity {
 //                } else return false;
 //            }
 //        });
-//
-//        listView.setOnItemLongClickListener(new myItemLongClickListener());
+//        recyclerView.setOnItemLongClickListener(new myItemLongClickListener());
+        mGoodsAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+//                Toasty.info(MainActivity.this,"长按了",Toast.LENGTH_SHORT, false).show();
+                showPopupMenu(goodsList.get(position));
+                return false;
+            }
+        });
+
+        mGoodsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+            }
+        });
         fabAddAccount.setOnClickListener(FablickListener);
         fabAddIdCard.setOnClickListener(FablickListener);
 
@@ -126,7 +139,8 @@ public class MainActivity extends AppCompatActivity {
 //        qb = mAccountDao.queryBuilder().orderAsc(AccountDao.Properties.Firstchar, AccountDao.Properties.Username);
         qb = mGoodsDao.queryBuilder().orderDesc(GoodsDao.Properties.Name, GoodsDao.Properties.Adddate);
         accountsList = new ArrayList<>();
-        goodsList = new ArrayList<>();
+        if(goodsList==null)
+            goodsList = new ArrayList<>();
         goodsList.clear();
         goodsList.addAll(qb.list());
         Log.d("家具List：",goodsList.toString());
@@ -135,7 +149,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             ll_empty.setVisibility(View.VISIBLE);
         }
-        mGoodsAdapter = new GoodsAdapter(R.layout.item_goods,goodsList);
+        if(mGoodsAdapter==null)
+            mGoodsAdapter = new GoodsAdapter(R.layout.item_goods,goodsList);
         recyclerView.setAdapter(mGoodsAdapter);
         if(mGoodsAdapter!=null)
             mGoodsAdapter.notifyDataSetChanged();
@@ -211,14 +226,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public class myItemLongClickListener implements AdapterView.OnItemLongClickListener {
-
-        @Override
-        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-            showPopupMenu(accountsList.get(i));
-            return true;
-        }
-    }
 
 
     private void showPopupWindow(final Account account) {
@@ -283,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void showPopupMenu(final Account account) {
+    private void showPopupMenu(final Goods goods) {
 
         LayoutInflater inflater = getLayoutInflater();
         View contentView = inflater.from(MainActivity.this).inflate(R.layout.pop_menu, null);
@@ -299,14 +306,13 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayout layout1 = contentView.findViewById(R.id.layout1);
         LinearLayout layout2 = contentView.findViewById(R.id.layout2);
-        LinearLayout layout3 = contentView.findViewById(R.id.layout3);
 
         //修改账号
         layout1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, EditAccountActivity.class);
-                intent.putExtra("account_data", account);
+                Intent intent = new Intent(MainActivity.this, EditGoodsActivity.class);
+                intent.putExtra("account_data", goods);
                 startActivity(intent);
                 mPopWindow.dismiss();
             }
@@ -319,16 +325,10 @@ public class MainActivity extends AppCompatActivity {
 //                mAccountDao.delete(account);
 //                accountAdapter.notifyDataSetChanged();
                 mPopWindow.dismiss();
-                showPopTip(account);
+//                showPopTip(goods);
             }
         });
 
-        layout3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                UIUtils.toast(context, "点击了layout3");
-            }
-        });
 
         mPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
 

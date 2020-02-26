@@ -42,7 +42,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activitys.CardActivity" />
-        <activity android:name=".activitys.EditAccountActivity" />
+        <activity android:name=".activitys.EditGoodsActivity" />
         <activity android:name=".activitys.CardDetailActivity" />
         <activity android:name=".activitys.RecorveyActivity" />
         <activity android:name=".base.BaseActivity" />

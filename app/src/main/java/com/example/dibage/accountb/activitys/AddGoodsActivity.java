@@ -42,7 +42,7 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
     private ImageButton btn_clear3;
     private ImageButton btn_clear4;
     private ImageButton btn_clear5;
-
+    private ImageButton btn_clear6;
     EditText et_name;
     EditText et_remain;
     EditText et_sold;
@@ -102,6 +102,7 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
         btn_clear3.setOnClickListener(this);
         btn_clear4.setOnClickListener(this);
         btn_clear5.setOnClickListener(this);
+        btn_clear6.setOnClickListener(this);
         btn_Submit.setOnClickListener(clickListener);
         btn_getRandom.setOnClickListener(this);
 
@@ -135,6 +136,7 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
         btn_clear3 = findViewById(R.id.btn_clear3);
         btn_clear4 = findViewById(R.id.btn_clear4);
         btn_clear5 = findViewById(R.id.btn_clear5);
+        btn_clear5 = findViewById(R.id.btn_clear6);
         toolbar = findViewById(R.id.toolbar);
         listView = findViewById(R.id.listview);
         btn_getRandom = findViewById(R.id.btn_getRandom);
@@ -167,7 +169,7 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
                             if(SimpleUtils.isNotNull(et_category)) {
                                 msg = "保存成功";
                                 VertifyState = true;
-                                AddRecord(et_name,et_remain,et_category,et_remarks);
+                                addRecord();
                                 AddGoodsActivity.this.finish();
                             }
                             else
@@ -190,7 +192,7 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
     };
 
     //向数据库添加一条记录
-    private void AddRecord(EditText et_nameg, EditText et_remain, EditText et_category, EditText et_remarks) {
+    private void addRecord() {
         String name = SimpleUtils.getStrings(et_name);
         int remain = SimpleUtils.getInt(et_remain);
         int sold = SimpleUtils.getInt(et_sold);

@@ -69,6 +69,7 @@ public class Goods implements Serializable {
         return "Goods{" +
                 "name='" + name + '\'' +
                 ", remain=" + remain +
+                ", sold=" + sold +
                 ", category='" + category + '\'' +
                 ", price=" + price +
                 ", remark='" + remark + '\'' +
@@ -76,7 +77,6 @@ public class Goods implements Serializable {
                 ", adddate='" + adddate + '\'' +
                 '}';
     }
-
 
     @Generated(hash = 1770709345)
     public Goods() {

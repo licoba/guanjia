@@ -22,15 +22,17 @@ import android.widget.Toast;
 
 import com.example.dibage.accountb.R;
 import com.example.dibage.accountb.applications.MyApplication;
-import com.example.dibage.accountb.dao.AccountDao;
 import com.example.dibage.accountb.dao.DaoSession;
+import com.example.dibage.accountb.dao.GoodsDao;
 import com.example.dibage.accountb.entitys.Goods;
+import com.example.dibage.accountb.utils.AccountUtils;
+import com.example.dibage.accountb.utils.DateUtils;
 import com.example.dibage.accountb.utils.SimpleUtils;
 
 import es.dmoral.toasty.Toasty;
 
 //编辑库存
-public class EditAccountActivity extends AppCompatActivity implements View.OnClickListener{
+public class EditGoodsActivity extends AppCompatActivity implements View.OnClickListener{
 
     private ImageButton btn_clear1;
     private ImageButton btn_clear2;
@@ -50,7 +52,7 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
 
     Toolbar toolbar;
     DaoSession daoSession ;
-    AccountDao mAccountDao;
+    GoodsDao mGoodsDao;
     private PopupWindow mPopupWindow;
 
     int length = 12;
@@ -81,7 +83,7 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
 
     private void initData() {
         daoSession = ((MyApplication)getApplication()).getDaoSession();
-        mAccountDao = daoSession.getAccountDao();
+        mGoodsDao = daoSession.getGoodsDao();
         mGoods = (Goods) getIntent().getSerializableExtra("account_data");
     }
 
@@ -104,6 +106,7 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
         et_remain = findViewById(R.id.etRemain);
         et_sold = findViewById(R.id.etSold);
         et_remarks = findViewById(R.id.etRemark);
+        et_price = findViewById(R.id.etPrice);
         btn_Submit = findViewById(R.id.btnSubmit);
         btn_clear1 = findViewById(R.id.btn_clear1);
         btn_clear2 = findViewById(R.id.btn_clear2);
@@ -129,7 +132,7 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditAccountActivity.this.finish();
+                EditGoodsActivity.this.finish();
             }
         });
     }
@@ -147,7 +150,7 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
                                 msg = "保存成功";
                                 VertifyState = true;
                                 ModifyRecord();
-                                EditAccountActivity.this.finish();
+                                EditGoodsActivity.this.finish();
                             }
                             else
                                 msg="请填写产品种类";
@@ -157,12 +160,12 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
                     else
                         msg="产品名称不能为空";
                     if (VertifyState)
-                        Toasty.success(EditAccountActivity.this, msg, Toast.LENGTH_SHORT, true).show();
+                        Toasty.success(EditGoodsActivity.this, msg, Toast.LENGTH_SHORT, true).show();
                     else
-                        Toasty.warning(EditAccountActivity.this, msg, Toast.LENGTH_SHORT, true).show();
+                        Toasty.warning(EditGoodsActivity.this, msg, Toast.LENGTH_SHORT, true).show();
                     break;
                 default:
-                    Toasty.warning(EditAccountActivity.this, msg, Toast.LENGTH_SHORT, true).show();
+                    Toasty.warning(EditGoodsActivity.this, msg, Toast.LENGTH_SHORT, true).show();
 
             }
         }
@@ -170,14 +173,16 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
 
     //修改记录
     private void ModifyRecord() {
-
-//        String description = SimpleUtils.getStrings(et_description);
-//        String username = SimpleUtils.getStrings(et_username);
-//        String password = SimpleUtils.getStrings(et_password);
-//        String remarks = SimpleUtils.getStrings(et_remarks);
-//        String firstChar = AccountUtils.getFirstString(description);
-//        Account account1 = new Account(account.getId(),description,username,password,remarks,firstChar);
-//        mAccountDao.update(account1);
+        String name = SimpleUtils.getStrings(et_name);
+        int remain = SimpleUtils.getInt(et_remain);
+        int sold = SimpleUtils.getInt(et_sold);
+        String category = SimpleUtils.getStrings(et_category);
+        float price = SimpleUtils.getFloat(et_price);
+        String remark = SimpleUtils.getStrings(et_remarks);
+        String firstChar = AccountUtils.getFirstString(name);
+        String adddate = DateUtils.getNowTimeString();
+        Goods goods = new Goods(mGoods.getId(),name,remain,sold,category,price,remark,firstChar,adddate);
+        mGoodsDao.update(goods);
 
     }
 
@@ -210,8 +215,8 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
     private void showPopRandom() {
         mPopupWindow = new PopupWindow();
         LayoutInflater inflater = getLayoutInflater();
-        View contentView = inflater.from(EditAccountActivity.this).inflate(R.layout.pop_random, null);
-        View rootview = inflater.from(EditAccountActivity.this). inflate(R.layout.activity_add_account, null);
+        View contentView = inflater.from(EditGoodsActivity.this).inflate(R.layout.pop_random, null);
+        View rootview = inflater.from(EditGoodsActivity.this). inflate(R.layout.activity_add_account, null);
         mPopupWindow = new PopupWindow(contentView,
                 getWindowManager().getDefaultDisplay().getWidth() - 200, WindowManager.LayoutParams.WRAP_CONTENT, true);
         mPopupWindow.showAtLocation(rootview, Gravity.CENTER, 0, 0);
@@ -252,7 +257,7 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
                         .getSystemService(Context.CLIPBOARD_SERVICE);
                 cmb.setText(tv_pwd_random.getText());
                 mPopupWindow.dismiss();
-                Toasty.success(EditAccountActivity.this, "已复制："+tv_pwd_random.getText(), Toast.LENGTH_SHORT, false).show();
+                Toasty.success(EditGoodsActivity.this, "已复制："+tv_pwd_random.getText(), Toast.LENGTH_SHORT, false).show();
             }
         });
 
