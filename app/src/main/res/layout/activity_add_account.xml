@@ -386,12 +386,19 @@
             </LinearLayout>
 
             <Button
-
-                android:visibility="gone"
-                android:id="@+id/btn_getRandom"
                 android:layout_marginTop="20dp"
-                android:text="生成随机密码"
-                style="@style/style_btn" />
+                android:id="@+id/btn_delete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/corners_delete"
+                android:text="删除该商品"
+                android:textSize="16sp"
+                android:textColor="@color/WhiteText"
+                />
+
+
 
 
         </LinearLayout>

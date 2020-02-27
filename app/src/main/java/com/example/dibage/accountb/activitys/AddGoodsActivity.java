@@ -50,7 +50,6 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
     EditText et_remarks;
     EditText et_price;
     Button btn_Submit;
-    Button btn_getRandom;
     ListView listView;
 
     Toolbar toolbar;
@@ -91,9 +90,7 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
 
     private void initData() {
         daoSession = ((MyApplication)getApplication()).getDaoSession();
-//        mAccountDao = daoSession.getAccountDao();
         mGoodsDao = daoSession.getGoodsDao();
-
     }
 
     private void initEvent() {
@@ -104,7 +101,6 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
         btn_clear5.setOnClickListener(this);
         btn_clear6.setOnClickListener(this);
         btn_Submit.setOnClickListener(clickListener);
-        btn_getRandom.setOnClickListener(this);
 
         //背景变暗的处理
         mHandler = new Handler(){
@@ -140,8 +136,7 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
         btn_clear6 = findViewById(R.id.btn_clear6);
         toolbar = findViewById(R.id.toolbar);
         listView = findViewById(R.id.listview);
-        btn_getRandom = findViewById(R.id.btn_getRandom);
-
+        findViewById(R.id.btn_delete).setVisibility(View.INVISIBLE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -170,7 +165,8 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
                             if(SimpleUtils.isNotNull(et_category)) {
                                 msg = "保存成功";
                                 VertifyState = true;
-                                addRecord();
+
+                                if(!addRecord()) return;
                                 AddGoodsActivity.this.finish();
                             }
                             else
@@ -193,7 +189,8 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
     };
 
     //向数据库添加一条记录
-    private void addRecord() {
+    private boolean addRecord() {
+
         String name = SimpleUtils.getStrings(et_name);
         int remain = SimpleUtils.getInt(et_remain);
         int sold = SimpleUtils.getInt(et_sold);
@@ -202,8 +199,24 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
         String remark = SimpleUtils.getStrings(et_remarks);
         String firstChar = AccountUtils.getFirstString(name);
         String adddate = DateUtils.getNowTimeString();
+
+        if(price<0){
+            Toasty.warning(AddGoodsActivity.this, "价格不得小于0，请检查后重新填写", Toast.LENGTH_SHORT, true).show();
+            return false;
+        }else if(remain<0){
+            Toasty.warning(AddGoodsActivity.this, "库存不得小于0，请检查后重新填写", Toast.LENGTH_SHORT, true).show();
+            return false;
+        }else if(sold<0){
+            Toasty.warning(AddGoodsActivity.this, "待出库不得小于0，请检查后重新填写", Toast.LENGTH_SHORT, true).show();
+            return false;
+        }else if(sold>remain){
+            Toasty.warning(AddGoodsActivity.this, "待出库数不得大于库存总量", Toast.LENGTH_SHORT, true).show();
+            return false;
+        }
+
         Goods goods = new Goods(name,remain,sold,category,price,remark,firstChar,adddate);
         mGoodsDao.insert(goods);
+        return true;
     }
 
     @Override
@@ -225,9 +238,6 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.btn_clear6:
                 et_sold.setText("");
-                break;
-            case R.id.btn_getRandom:
-                showPopRandom();
                 break;
         }
     }

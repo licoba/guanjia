@@ -4,6 +4,7 @@ package com.example.dibage.accountb.activitys;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -25,6 +27,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
+import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 import com.example.dibage.accountb.R;
 import com.example.dibage.accountb.adapters.GoodsAdapter;
 import com.example.dibage.accountb.applications.MyApplication;
@@ -96,6 +100,26 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
+        OnItemSwipeListener onItemSwipeListener = new OnItemSwipeListener() {
+            @Override
+            public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int pos) {}
+            @Override
+            public void clearView(RecyclerView.ViewHolder viewHolder, int pos) {}
+            @Override
+            public void onItemSwiped(RecyclerView.ViewHolder viewHolder, int pos) {}
+            @Override
+            public void onItemSwipeMoving(Canvas canvas, RecyclerView.ViewHolder viewHolder, float dX, float dY, boolean isCurrentlyActive) {
+
+            }
+        };
+
+        ItemDragAndSwipeCallback itemDragAndSwipeCallback = new ItemDragAndSwipeCallback(mGoodsAdapter);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDragAndSwipeCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
+        // 开启滑动删除
+        mGoodsAdapter.enableSwipeItem();
+        mGoodsAdapter.setOnItemSwipeListener(onItemSwipeListener);
 
         mGoodsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -149,6 +173,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(mGoodsAdapter);
         if(mGoodsAdapter!=null)
             mGoodsAdapter.notifyDataSetChanged();
+
+
     }
 
     private void initFBI() {
@@ -341,7 +367,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         popTip.setTitleAndContent("删除警告", "账号被删除之后将无法被找回，确定删除该账号？");
-
     }
 
 
