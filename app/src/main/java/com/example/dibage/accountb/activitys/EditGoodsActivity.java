@@ -106,6 +106,8 @@ public class EditGoodsActivity extends AppCompatActivity implements View.OnClick
         et_remain.setText(mGoods.getRemain()+"");
         et_sold.setText(mGoods.getSold()+"");
         et_category.setText(mGoods.getCategory());
+        et_remarks.setText(mGoods.getRemark());
+        et_price.setText(mGoods.getPrice()+"");
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

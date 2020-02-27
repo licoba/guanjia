@@ -24,6 +24,7 @@
         <ImageView
             android:id="@+id/btn_add"
             android:clickable="true"
+            android:visibility="invisible"
             android:layout_marginRight="18dp"
             android:layout_gravity="right|center_vertical"
             android:layout_width="wrap_content"

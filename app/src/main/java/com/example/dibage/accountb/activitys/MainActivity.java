@@ -118,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         // 开启滑动删除
-        mGoodsAdapter.enableSwipeItem();
-        mGoodsAdapter.setOnItemSwipeListener(onItemSwipeListener);
+//        mGoodsAdapter.enableSwipeItem();
+//        mGoodsAdapter.setOnItemSwipeListener(onItemSwipeListener);
 
         mGoodsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
