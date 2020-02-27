@@ -32,7 +32,6 @@ import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 import com.example.dibage.accountb.R;
 import com.example.dibage.accountb.adapters.GoodsAdapter;
 import com.example.dibage.accountb.applications.MyApplication;
-import com.example.dibage.accountb.commonView.PopWindowTip;
 import com.example.dibage.accountb.dao.AccountDao;
 import com.example.dibage.accountb.dao.DaoSession;
 import com.example.dibage.accountb.dao.GoodsDao;
@@ -87,18 +86,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initEvent() {
-//        //监听Item的点击事件
-//        listView.setOnItemClickListener(new myItemClickListener());
-//        //监听ListView的触摸事件
-//        listView.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                if (floatingActionMenu.isOpened()) {
-//                    floatingActionMenu.close(true);
-//                    return true;
-//                } else return false;
-//            }
-//        });
 
         OnItemSwipeListener onItemSwipeListener = new OnItemSwipeListener() {
             @Override
@@ -319,10 +306,7 @@ public class MainActivity extends AppCompatActivity {
         layout2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                mAccountDao.delete(account);
-//                accountAdapter.notifyDataSetChanged();
                 mPopWindow.dismiss();
-//                showPopTip(goods);
             }
         });
 
@@ -334,39 +318,6 @@ public class MainActivity extends AppCompatActivity {
                 UIUtils.darkenBackgroud(MainActivity.this, 1f);
             }
         });
-    }
-
-    //删除提示框
-    private void showPopTip(final Account account) {
-        PopWindowTip popTip = new PopWindowTip(MainActivity.this){
-            @Override
-            protected void clickCancel() {
-
-            }
-
-            @Override
-            protected void dismissTodo() {
-
-            }
-
-            @Override
-            public void clickConfirm() {
-//                mAccountDao.delete(account);
-//                accountsList.clear();
-//                accountsList.addAll(qb.list());
-//                accountsList = AccountUtils.orderListAccount(accountsList);
-//                accountAdapter.notifyDataSetChanged();
-                if (accountsList.size() > 0) {
-                    ll_empty.setVisibility(View.INVISIBLE);
-//                    sideBar.setVisibility(View.VISIBLE);
-                } else {
-                    ll_empty.setVisibility(View.VISIBLE);
-//                    sideBar.setVisibility(View.INVISIBLE);
-                }
-                Toasty.success(context, "删除成功", Toast.LENGTH_SHORT, false).show();
-            }
-        };
-        popTip.setTitleAndContent("删除警告", "账号被删除之后将无法被找回，确定删除该账号？");
     }
 
 
@@ -468,18 +419,4 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (resultCode == RESULT_OK) {
-//            switch (requestCode) {
-//                case RECORVRY_DATA://备份文件导入完成，刷新数据
-//
-//                    break;
-//                case ADD_ACCOUNT://添加账号完成
-//                    initData();
-//                    break;
-//            }
-//        }
-//    }
 }

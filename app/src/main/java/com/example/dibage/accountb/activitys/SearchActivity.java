@@ -1,8 +1,10 @@
 package com.example.dibage.accountb.activitys;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -13,13 +15,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.dibage.accountb.R;
-import com.example.dibage.accountb.adapters.AccountAdapter;
 import com.example.dibage.accountb.adapters.ChangeColorAdapter;
+import com.example.dibage.accountb.adapters.GoodsAdapter;
 import com.example.dibage.accountb.applications.MyApplication;
-import com.example.dibage.accountb.dao.AccountDao;
 import com.example.dibage.accountb.dao.DaoSession;
+import com.example.dibage.accountb.dao.GoodsDao;
 import com.example.dibage.accountb.entitys.Account;
-import com.example.dibage.accountb.utils.AccountUtils;
+import com.example.dibage.accountb.entitys.Goods;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 import org.greenrobot.greendao.query.WhereCondition;
@@ -27,25 +29,26 @@ import org.greenrobot.greendao.query.WhereCondition;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.view.View.VISIBLE;
-
 public class SearchActivity extends AppCompatActivity {
     private Context context;
     List<Account> accountsList = new ArrayList<>();
+    List<Goods> mGoodsList = new ArrayList<>();
+
     private Button btn_cancel;
     private ListView lv_result;
     private TextView tv_tip;
     private EditText et_search;
-
+    private RecyclerView mRecyclerView;
+    GoodsAdapter mGoodsAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         context = getApplicationContext();
-
         btn_cancel = findViewById(R.id.btn_cancel);
         lv_result = findViewById(R.id.lv_result);
         tv_tip = findViewById(R.id.tv_tip);
+        mRecyclerView = findViewById(R.id.recyclerView);
         et_search = findViewById(R.id.et_search);
         et_search.addTextChangedListener(new mTextWatcher());
 //        et_search.getFocusable(true);
@@ -55,7 +58,8 @@ public class SearchActivity extends AppCompatActivity {
                 SearchActivity.this.finish();
             }
         });
-
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(layoutManager);
 
     }
 
@@ -95,44 +99,45 @@ public class SearchActivity extends AppCompatActivity {
         //把ListView中所有s字符变色
         @Override
         public void afterTextChanged(Editable editable) {
-
-
-
-
             s = editable.toString().trim();
             Log.e("SA输入字符：", s);
             if (!s.equals("")) {
                 //获取dao实例
                 DaoSession daoSession = ((MyApplication) getApplication()).getDaoSession();
-                AccountDao mAccountDao = daoSession.getAccountDao();
+                GoodsDao mGoodsDao = daoSession.getGoodsDao();
                 //获取queryBuilder，通过queryBuilder来实现查询功能
-                QueryBuilder<Account> qb = mAccountDao.queryBuilder();
-                WhereCondition whereCondition1 = AccountDao.Properties.Description.like('%' + s + '%');
-                WhereCondition whereCondition2 = AccountDao.Properties.Username.like('%' + s + '%');
+                QueryBuilder<Goods> qb = mGoodsDao.queryBuilder();
+                WhereCondition whereCondition1 = GoodsDao.Properties.Name.like('%' + s + '%');
+                WhereCondition whereCondition2 = GoodsDao.Properties.Category.like('%' + s + '%');
                 qb.whereOr(whereCondition1, whereCondition2);
-                qb.orderAsc(AccountDao.Properties.Firstchar, AccountDao.Properties.Username);
-
-                accountsList = qb.list();
-                accountsList = AccountUtils.orderListAccount(accountsList);
-                Log.e("SA结果:", accountsList.toString());
-                Log.e("SA结果总数:", accountsList.size() + "");
-
+                qb.orderAsc(GoodsDao.Properties.Name, GoodsDao.Properties.Category);
+                mGoodsList.clear();
+                mGoodsList.addAll(qb.list());
+//                accountsList = AccountUtils.orderListAccount(accountsList);
+                Log.e("SA结果:", mGoodsList.toString());
+                Log.e("SA结果总数:", mGoodsList.size() + "");
                 //填充到ListView
                 tv_tip.setVisibility(View.GONE);
-                if(accountsList.size()==0){
+                if(mGoodsList.size()==0){
                     tv_tip.setText("抱歉，无匹配记录");
                     tv_tip.setVisibility(View.VISIBLE);
                 }
-
-
             }else{
-                    accountsList.clear();
-                    tv_tip.setText("请输入关键字");
-                    tv_tip.setVisibility(View.VISIBLE);
+                mGoodsList.clear();
+                tv_tip.setText("请输入关键字");
+                tv_tip.setVisibility(View.VISIBLE);
             }
             ChangeColorAdapter accountAdapter = new ChangeColorAdapter(context, R.layout.item_listview, accountsList);
             accountAdapter.setsearchString(s);
             lv_result.setAdapter(accountAdapter);
+
+            if(mGoodsAdapter==null) {
+                mGoodsAdapter = new GoodsAdapter(R.layout.item_goods, mGoodsList);
+                mRecyclerView.setAdapter(mGoodsAdapter);
+            }
+            mGoodsAdapter.notifyDataSetChanged();
+
+
         }
     }
 }
