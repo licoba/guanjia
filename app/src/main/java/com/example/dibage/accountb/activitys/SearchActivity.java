@@ -1,6 +1,7 @@
 package com.example.dibage.accountb.activitys;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.dibage.accountb.R;
 import com.example.dibage.accountb.adapters.ChangeColorAdapter;
 import com.example.dibage.accountb.adapters.GoodsAdapter;
@@ -57,9 +59,62 @@ public class SearchActivity extends AppCompatActivity {
         });
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
-
+        if(mGoodsAdapter==null) {
+            mGoodsAdapter = new GoodsAdapter(R.layout.item_goods, mGoodsList);
+            mRecyclerView.setAdapter(mGoodsAdapter);
+        }
+        initEvent();
     }
 
+    public void initData(){
+        String s;
+        s = et_search.getText().toString().trim();
+        if (!s.equals("")) {
+            //获取dao实例
+            //获取dao实例
+            DaoSession daoSession = ((MyApplication) getApplication()).getDaoSession();
+            GoodsDao mGoodsDao = daoSession.getGoodsDao();
+            //获取queryBuilder，通过queryBuilder来实现查询功能
+            QueryBuilder<Goods> qb = mGoodsDao.queryBuilder();
+            WhereCondition whereCondition1 = GoodsDao.Properties.Name.like('%' + s + '%');
+            WhereCondition whereCondition2 = GoodsDao.Properties.Category.like('%' + s + '%');
+            qb.whereOr(whereCondition1, whereCondition2);
+            qb.orderAsc(GoodsDao.Properties.Name, GoodsDao.Properties.Category);
+            mGoodsList.clear();
+            mGoodsList.addAll(qb.list());
+            Log.e("SA结果:", mGoodsList.toString());
+            Log.e("SA结果总数:", mGoodsList.size() + "");
+            tv_tip.setVisibility(View.GONE);
+            if(mGoodsList.size()==0){
+                tv_tip.setText("抱歉，无匹配记录");
+                tv_tip.setVisibility(View.VISIBLE);
+            }
+        }else{
+            mGoodsList.clear();
+            tv_tip.setText("请输入关键字");
+            tv_tip.setVisibility(View.VISIBLE);
+        }
+        ChangeColorAdapter accountAdapter = new ChangeColorAdapter(context, R.layout.item_listview, accountsList);
+        accountAdapter.setsearchString(s);
+        if(mGoodsAdapter==null) {
+            mGoodsAdapter = new GoodsAdapter(R.layout.item_goods, mGoodsList);
+            mRecyclerView.setAdapter(mGoodsAdapter);
+        }
+        mGoodsAdapter.notifyDataSetChanged();
+    }
+
+    public void initEvent(){
+
+        Log.d("AAA","点击了item");
+        mGoodsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent intent = new Intent(SearchActivity.this, EditGoodsActivity.class);
+                intent.putExtra("account_data", (mGoodsList.get(position)));
+                startActivity(intent);
+            }
+        });
+    }
 
     class mTextWatcher implements TextWatcher {
         String s;
@@ -92,6 +147,7 @@ public class SearchActivity extends AppCompatActivity {
             Log.e("SA输入字符：", s);
             if (!s.equals("")) {
                 //获取dao实例
+                //获取dao实例
                 DaoSession daoSession = ((MyApplication) getApplication()).getDaoSession();
                 GoodsDao mGoodsDao = daoSession.getGoodsDao();
                 //获取queryBuilder，通过queryBuilder来实现查询功能
@@ -122,5 +178,13 @@ public class SearchActivity extends AppCompatActivity {
             }
             mGoodsAdapter.notifyDataSetChanged();
         }
+    }
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
     }
 }
