@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.dibage.accountb.R;
@@ -35,7 +34,6 @@ public class SearchActivity extends AppCompatActivity {
     List<Goods> mGoodsList = new ArrayList<>();
 
     private Button btn_cancel;
-    private ListView lv_result;
     private TextView tv_tip;
     private EditText et_search;
     private RecyclerView mRecyclerView;
@@ -46,7 +44,6 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         context = getApplicationContext();
         btn_cancel = findViewById(R.id.btn_cancel);
-        lv_result = findViewById(R.id.lv_result);
         tv_tip = findViewById(R.id.tv_tip);
         mRecyclerView = findViewById(R.id.recyclerView);
         et_search = findViewById(R.id.et_search);
@@ -65,15 +62,7 @@ public class SearchActivity extends AppCompatActivity {
 
 
     class mTextWatcher implements TextWatcher {
-
         String s;
-
-        /**
-         * CharSequence s：文本改变之前的内容
-         * int start：文本开始改变时的起点位置，从0开始计算
-         * int count：要被改变的文本字数，即将要被替代的选中文本字数
-         * int after：改变后添加的文本字数，即替代选中文本后的文本字数
-         */
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -113,10 +102,8 @@ public class SearchActivity extends AppCompatActivity {
                 qb.orderAsc(GoodsDao.Properties.Name, GoodsDao.Properties.Category);
                 mGoodsList.clear();
                 mGoodsList.addAll(qb.list());
-//                accountsList = AccountUtils.orderListAccount(accountsList);
                 Log.e("SA结果:", mGoodsList.toString());
                 Log.e("SA结果总数:", mGoodsList.size() + "");
-                //填充到ListView
                 tv_tip.setVisibility(View.GONE);
                 if(mGoodsList.size()==0){
                     tv_tip.setText("抱歉，无匹配记录");
@@ -129,15 +116,11 @@ public class SearchActivity extends AppCompatActivity {
             }
             ChangeColorAdapter accountAdapter = new ChangeColorAdapter(context, R.layout.item_listview, accountsList);
             accountAdapter.setsearchString(s);
-            lv_result.setAdapter(accountAdapter);
-
             if(mGoodsAdapter==null) {
                 mGoodsAdapter = new GoodsAdapter(R.layout.item_goods, mGoodsList);
                 mRecyclerView.setAdapter(mGoodsAdapter);
             }
             mGoodsAdapter.notifyDataSetChanged();
-
-
         }
     }
 }
