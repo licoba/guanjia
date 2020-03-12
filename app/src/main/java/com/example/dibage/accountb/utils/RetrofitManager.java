@@ -8,12 +8,12 @@ import retrofit2.Retrofit;
 /**
  * Created by zjw on 2020/3/12.
  */
-public class RetrofitUtils {
+public class RetrofitManager {
     private Retrofit mRetrofit;
     final String BASE_URL = "http://67.216.195.108:3000";
 
     //构造器私有，这个工具类只有一个实例
-    private RetrofitUtils() {
+    private RetrofitManager() {
         OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
         httpClientBuilder.connectTimeout(10, TimeUnit.SECONDS);
         mRetrofit = new Retrofit.Builder()
@@ -28,12 +28,12 @@ public class RetrofitUtils {
      *
      * @return
      */
-    public static RetrofitUtils getInstance() {
+    public static RetrofitManager getInstance() {
         return Inner.retrofitManager;
     }
 
     private static class Inner {
-        private static final RetrofitUtils retrofitManager = new RetrofitUtils();
+        private static final RetrofitManager retrofitManager = new RetrofitManager();
     }
 
 
