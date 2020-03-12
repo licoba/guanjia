@@ -4,13 +4,14 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by zjw on 2020/3/12.
  */
 public class RetrofitManager {
     private Retrofit mRetrofit;
-    final String BASE_URL = "http://67.216.195.108:3000";
+    public static final String BASE_URL = "http://67.216.195.108:3000/";
 
     //构造器私有，这个工具类只有一个实例
     private RetrofitManager() {
@@ -19,6 +20,7 @@ public class RetrofitManager {
         mRetrofit = new Retrofit.Builder()
                 .client(httpClientBuilder.build())
                 .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create()) // 加上这句话
                 .build();
     }
 
@@ -40,12 +42,12 @@ public class RetrofitManager {
     /**
      * 利用泛型传入接口class返回接口实例
      *
-     * @param ser 类
+     * @param service 类
      * @param <T> 类的类型
      * @return Observable
      */
-    public <T> T createRs(Class<T> ser) {
-        return mRetrofit.create(ser);
+    public <T> T createService(Class<T> service) {
+        return mRetrofit.create(service);
     }
 
 

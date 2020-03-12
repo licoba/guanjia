@@ -37,16 +37,22 @@ import com.example.dibage.accountb.dao.DaoSession;
 import com.example.dibage.accountb.dao.GoodsDao;
 import com.example.dibage.accountb.entitys.Account;
 import com.example.dibage.accountb.entitys.Goods;
+import com.example.dibage.accountb.entitys.User;
+import com.example.dibage.accountb.services.ApiService;
+import com.example.dibage.accountb.utils.RetrofitManager;
+import com.example.dibage.accountb.utils.ThreadUtils;
 import com.example.dibage.accountb.utils.UIUtils;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
+import retrofit2.Call;
 
 import static com.example.dibage.accountb.activitys.MoreActivity.RECORVRY_DATA;
 
@@ -149,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
             goodsList = new ArrayList<>();
         goodsList.clear();
         goodsList.addAll(qb.list());
-        Log.d("家具List：",goodsList.toString());
+
         if (goodsList.size() > 0) {
             ll_empty.setVisibility(View.GONE);
         } else {
@@ -162,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
             mGoodsAdapter.notifyDataSetChanged();
 
 
+
     }
 
     private void initFBI() {
@@ -171,6 +178,27 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         ll_empty = findViewById(R.id.ll_empty);
         toolbar = findViewById(R.id.toolbar);
+
+        ApiService apiService = RetrofitManager.getInstance().createService(ApiService.class);
+        User loginUser = new User("123","123","123");
+        Log.e("开始","开始测试网络请求");
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                Call<User> userCall = apiService.login(loginUser);
+                try {
+                    userCall.execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        ThreadUtils.getCachedPool().execute(runnable);
+
+        Log.e("开始","结束测试网络请求");
+
     }
 
 

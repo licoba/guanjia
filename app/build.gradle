@@ -80,5 +80,6 @@ dependencies {
     implementation 'com.gcssloop.widget:rclayout:1.6.0'
     //网络请求框架retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.7.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.7.2'
 
 }
