@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class RetrofitManager {
     private Retrofit mRetrofit;
-    public static final String BASE_URL = "http://67.216.195.108:3000/";
+    public static final String BASE_URL = "http://10.30.66.25:3000/";
 
     //构造器私有，这个工具类只有一个实例
     private RetrofitManager() {
@@ -19,8 +19,8 @@ public class RetrofitManager {
         httpClientBuilder.connectTimeout(10, TimeUnit.SECONDS);
         mRetrofit = new Retrofit.Builder()
                 .client(httpClientBuilder.build())
-                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create()) // 加上这句话
+                .baseUrl(BASE_URL)
                 .build();
     }
 

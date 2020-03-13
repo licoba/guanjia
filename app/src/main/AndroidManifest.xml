@@ -24,6 +24,13 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activitys.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activitys.RegisterActivity" />
         <activity android:name=".activitys.MainActivity" />
         <activity
             android:name=".activitys.AddGoodsActivity"
@@ -37,10 +44,7 @@
         <activity android:name=".activitys.AddPhotoActivity" />
         <activity android:name=".activitys.ModifyPasswordActivity" />
         <activity android:name=".activitys.GuideActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity android:name=".activitys.CardActivity" />
         <activity android:name=".activitys.EditGoodsActivity" />
@@ -58,7 +62,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".activitys.OpenSourceActivity"></activity>
+        <activity android:name=".activitys.OpenSourceActivity" />
     </application>
 
 </manifest>

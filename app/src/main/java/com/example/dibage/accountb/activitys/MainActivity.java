@@ -37,6 +37,7 @@ import com.example.dibage.accountb.dao.DaoSession;
 import com.example.dibage.accountb.dao.GoodsDao;
 import com.example.dibage.accountb.entitys.Account;
 import com.example.dibage.accountb.entitys.Goods;
+import com.example.dibage.accountb.entitys.ResponseBean;
 import com.example.dibage.accountb.entitys.User;
 import com.example.dibage.accountb.services.ApiService;
 import com.example.dibage.accountb.utils.RetrofitManager;
@@ -180,15 +181,18 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
 
         ApiService apiService = RetrofitManager.getInstance().createService(ApiService.class);
-        User loginUser = new User("123","123","123");
+        User loginUser = new User("12355","123456","17322309201");
         Log.e("开始","开始测试网络请求");
 
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                Call<User> userCall = apiService.login(loginUser);
+                Call<ResponseBean<User>> userCall = apiService.login(loginUser);
                 try {
-                    userCall.execute();
+                    // userCall.execute().toString():Response{protocol=http/1.1, code=200, message=OK, url=http://10.30.66.25:3000/user/login}
+                    // userCall.execute().body().toString():{code=1.0, msg=登录成功, data={_id=5e68ce69aa0652e5cb5994a9, username=licoba, password=123456, phone=17322309201, __v=0.0}}
+
+                    Log.e("返回：",userCall.execute().body().toString());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

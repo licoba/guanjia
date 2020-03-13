@@ -1,5 +1,6 @@
 package com.example.dibage.accountb.services;
 
+import com.example.dibage.accountb.entitys.ResponseBean;
 import com.example.dibage.accountb.entitys.User;
 
 import retrofit2.Call;
@@ -16,7 +17,7 @@ public interface  ApiService {
     @POST("user/login")
     //表明传的是json格式
     @Headers({"Content-Type: application/json"})
-    Call<User> login(@Body User user);
+    Call<ResponseBean<User>> login(@Body User user);
 
 
 
