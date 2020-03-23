@@ -180,28 +180,7 @@ public class MainActivity extends AppCompatActivity {
         ll_empty = findViewById(R.id.ll_empty);
         toolbar = findViewById(R.id.toolbar);
 
-        ApiService apiService = RetrofitManager.getInstance().createService(ApiService.class);
-        User loginUser = new User("12355","123456","17322309201");
-        Log.e("开始","开始测试网络请求");
 
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                Call<ResponseBean<User>> userCall = apiService.login(loginUser);
-                try {
-                    // userCall.execute().toString():Response{protocol=http/1.1, code=200, message=OK, url=http://10.30.66.25:3000/user/login}
-                    // userCall.execute().body().toString():{code=1.0, msg=登录成功, data={_id=5e68ce69aa0652e5cb5994a9, username=licoba, password=123456, phone=17322309201, __v=0.0}}
-
-                    Log.e("返回：",userCall.execute().body().toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        ThreadUtils.getCachedPool().execute(runnable);
-
-        Log.e("开始","结束测试网络请求");
 
     }
 
