@@ -32,6 +32,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import org.greenrobot.greendao.query.QueryBuilder;
@@ -45,6 +46,7 @@ import ezy.ui.layout.LoadingLayout;
 import retrofit2.Call;
 
 import static com.example.licoba.guanjia.activitys.MoreActivity.RECORVRY_DATA;
+import static com.scwang.smartrefresh.layout.header.ClassicsHeader.REFRESH_HEADER_UPDATE;
 
 public class MainActivity extends AppCompatActivity {
     final String TAG = "MainActivity";
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     GoodsDao mGoodsDao;
     SmartRefreshLayout refreshLayout;
     Context mContext;
-
+    ClassicsHeader header;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
                                 goodsList.addAll(goodsResponseBean.getData());
                                 mGoodsAdapter.notifyDataSetChanged();
                                 refreshLayout.finishRefresh(true);
+                                header.setLastUpdateText("产品共计"+goodsList.size()+"种");
                                 if(goodsList.size()>0)
                                     loadingLayout.showContent();
                                 else
@@ -151,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         refreshLayout = findViewById(R.id.refreshLayout);
         loadingLayout = findViewById(R.id.loadingLayout);
-
+        header = findViewById(R.id.header);
 
     }
 
@@ -159,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
     public void initView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setTitle("出入库管家");
@@ -176,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
         refreshLayout.setEnableOverScrollDrag(true);
         refreshLayout.setEnableOverScrollBounce(true);
         loadingLayout.showEmpty();
+        header.setLastUpdateText("等待库存刷新……");
     }
 
     @Override
