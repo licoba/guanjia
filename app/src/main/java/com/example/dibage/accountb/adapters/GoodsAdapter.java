@@ -54,11 +54,12 @@ public class GoodsAdapter extends BaseItemDraggableAdapter<Goods, BaseViewHolder
         }
 
 
-
         if(remain-sold<=0){
             helper.setBackgroundRes(R.id.rootLayout, R.drawable.corners_card_red);
         }else if(remain-sold==1){
             helper.setBackgroundRes(R.id.rootLayout, R.drawable.corners_card_yellow);
+        }else{
+            helper.setBackgroundRes(R.id.rootLayout, R.drawable.corners_card);
         }
 
     }

@@ -34,4 +34,9 @@ public interface  ApiService {
     @Headers({"Content-Type: application/json"})
     Call<ResponseBean<List<Goods>>> allGoods();
 
+    //添加货物
+    @POST("goods/add")
+    @Headers({"Content-Type: application/json"})
+    Call<ResponseBean<Goods>> addGoods(@Body Goods goods);
+
 }

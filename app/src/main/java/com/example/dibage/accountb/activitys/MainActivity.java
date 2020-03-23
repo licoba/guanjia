@@ -130,10 +130,12 @@ public class MainActivity extends AppCompatActivity {
                                 refreshLayout.finishRefresh(true);
                             }else{
                                 Log.d("返回：","拉取数据失败");
+                                refreshLayout.finishRefresh(false);
                             }
                         }
                     });
                 } catch (IOException e) {
+                    refreshLayout.finishRefresh(false);
                     Log.e(TAG,"请求抛异常了");
                     e.printStackTrace();
                 }

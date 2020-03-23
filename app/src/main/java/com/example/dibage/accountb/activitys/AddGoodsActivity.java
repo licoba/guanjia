@@ -2,11 +2,13 @@ package com.example.dibage.accountb.activitys;
 
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,12 +30,21 @@ import com.example.dibage.accountb.dao.AccountDao;
 import com.example.dibage.accountb.dao.DaoSession;
 import com.example.dibage.accountb.dao.GoodsDao;
 import com.example.dibage.accountb.entitys.Goods;
+import com.example.dibage.accountb.entitys.ResponseBean;
+import com.example.dibage.accountb.entitys.User;
+import com.example.dibage.accountb.services.ApiService;
 import com.example.dibage.accountb.utils.AccountUtils;
 import com.example.dibage.accountb.utils.DateUtils;
+import com.example.dibage.accountb.utils.RetrofitManager;
 import com.example.dibage.accountb.utils.SimpleUtils;
+import com.example.dibage.accountb.utils.ThreadUtils;
 import com.example.dibage.accountb.utils.UIUtils;
+import com.hss01248.dialog.StyledDialog;
+
+import java.io.IOException;
 
 import es.dmoral.toasty.Toasty;
+import retrofit2.Call;
 
 public class AddGoodsActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -163,26 +174,19 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
                     if (SimpleUtils.isNotNull(et_name)){
                         if (SimpleUtils.isNotNull(et_remain)){
                             if(SimpleUtils.isNotNull(et_category)) {
-                                msg = "保存成功";
-                                VertifyState = true;
-
-                                if(!addRecord()) return;
-                                AddGoodsActivity.this.finish();
+                                addRecord();
+                                return;
                             }
                             else
                                 msg="请填写产品种类";
                         }else
                             msg = "请填写库存数";
-                    }
-                    else
+                    } else
                         msg="产品名称不能为空";
-                    if (VertifyState)
-                        Toasty.success(AddGoodsActivity.this, msg, Toast.LENGTH_SHORT, true).show();
-                    else
                         Toasty.warning(AddGoodsActivity.this, msg, Toast.LENGTH_SHORT, true).show();
                     break;
                 default:
-                    Toasty.warning(AddGoodsActivity.this, msg, Toast.LENGTH_SHORT, true).show();
+                    break;
 
             }
         }
@@ -214,8 +218,46 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
             return false;
         }
 
-        Goods goods = new Goods(name,remain,sold,category,price,remark,firstChar,adddate);
-        mGoodsDao.insert(goods);
+        Goods toSaveGoods = new Goods(name,remain,sold,category,price,remark,firstChar,adddate);
+        StyledDialog.buildLoading("正在保存……").show();
+        ApiService apiService = RetrofitManager.getInstance().createService(ApiService.class);
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                Call<ResponseBean<Goods>> goodsCall = apiService.addGoods(toSaveGoods);
+                try {
+                    ResponseBean<Goods> goodsResponseBean= goodsCall.execute().body();
+                    Log.d("返回：",goodsResponseBean.toString());
+                    final int code = goodsResponseBean.getCode();
+                    final String msg = goodsResponseBean.getMsg();
+                    final Goods goods = goodsResponseBean.getData();
+                    new Handler(AddGoodsActivity.this.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            StyledDialog.dismissLoading(AddGoodsActivity.this);
+                            if(code != 1){
+                                Toasty.warning(AddGoodsActivity.this,msg).show();
+                                StyledDialog.dismissLoading(AddGoodsActivity.this);
+                                Toasty.warning(AddGoodsActivity.this,"保存失败，请稍后再试").show();
+                            }else{
+                                Toasty.success(AddGoodsActivity.this,msg).show();
+                                new Handler().postDelayed(new Runnable() {
+                                    public void run() {
+                                        AddGoodsActivity.this.finish();
+                                    }
+                                }, 400);
+                            }
+                        }
+                    });
+                } catch (IOException e) {
+                    StyledDialog.dismissLoading(AddGoodsActivity.this);
+                    Toasty.warning(AddGoodsActivity.this,"保存失败，请稍后再试").show();
+                    Log.e("AddGoodsActivity","请求抛异常了");
+                    e.printStackTrace();
+                }
+            }
+        };
+        ThreadUtils.getCachedPool().execute(runnable);
         return true;
     }
 
@@ -240,171 +282,6 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
                 et_sold.setText("");
                 break;
         }
-    }
-
-    private void showPopRandom() {
-        mPopupWindow = new PopupWindow();
-        LayoutInflater inflater = getLayoutInflater();
-        View contentView = inflater.from(AddGoodsActivity.this).inflate(R.layout.pop_random, null);
-        View rootview = inflater.from(AddGoodsActivity.this). inflate(R.layout.activity_add_account, null);
-        mPopupWindow = new PopupWindow(contentView,
-                getWindowManager().getDefaultDisplay().getWidth() - 200, WindowManager.LayoutParams.WRAP_CONTENT, true);
-        mPopupWindow.showAtLocation(rootview, Gravity.CENTER, 0, 0);
-
-        tv_pwd_random = contentView.findViewById(R.id.tv_pwd_random);
-        tv_length = contentView.findViewById(R.id.tv_length);
-        seekBar = contentView.findViewById(R.id.seekBar);
-        checkBox1 = contentView.findViewById(R.id.checkBox1);
-        checkBox2 = contentView.findViewById(R.id.checkBox2);
-        checkBox3 = contentView.findViewById(R.id.checkBox3);
-        btn_cancel = contentView.findViewById(R.id.btn_cancel);
-        btn_refresh =contentView.findViewById(R.id.btn_refresh);
-        btn_copy = contentView.findViewById(R.id.btn_copy);
-
-        initPopEvent();
-        mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                brightWindow();
-            }
-        });
-
-    }
-
-    private void initPopEvent() {
-        darkWindow();
-        tv_length.setText("["+length+"]");
-        seekBar.setProgress(length-4);
-        checkBox1.setChecked(big);
-        checkBox2.setChecked(small);
-        checkBox3.setChecked(special);
-
-        refresh();
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPopupWindow.dismiss();
-            }
-        });
-
-        btn_copy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                et_category.setText(tv_pwd_random.getText());
-                ClipboardManager cmb = (ClipboardManager) getApplicationContext()
-                        .getSystemService(Context.CLIPBOARD_SERVICE);
-                cmb.setText(tv_pwd_random.getText());
-                mPopupWindow.dismiss();
-                Toasty.success(AddGoodsActivity.this, "已复制："+tv_pwd_random.getText(), Toast.LENGTH_SHORT, false).show();
-            }
-        });
-
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                //Toasty.info(AddGoodsActivity.this,progress+"").show();
-                length = progress+4;
-                tv_length.setText("["+length+"]");
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                refresh();
-            }
-        });
-
-
-        btn_refresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refresh();
-            }
-        });
-        checkBox1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    big = true;
-                    refresh();
-                }else{
-                    big = false;
-                    refresh();
-                }
-            }
-        });
-        checkBox2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    small = true;
-                    refresh();
-                }else{
-                    small = false;
-                    refresh();
-                }
-            }
-        });
-        checkBox3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    special = true;
-                    refresh();
-                }else{
-                    special = false;
-                    refresh();
-                }
-            }
-        });
-    }
-
-    private void refresh() {
-        tv_pwd_random.setText(SimpleUtils.getRandomPwd(length,big,small,special));
-    }
-
-    private void brightWindow() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while(alpha<1.0f){
-                    try {
-                        Thread.sleep(3);//每0.004s变暗0.01
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    Message msg = mHandler.obtainMessage();
-                    msg.what = 1;
-                    alpha+=0.01f;
-                    msg.obj =alpha ;
-                    mHandler.sendMessage(msg);
-                }
-            }
-        }).start();
-    }
-
-    private void darkWindow() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while(alpha>0.5f){
-                    try {
-                        Thread.sleep(3);//每0.004s变暗0.01
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    Message msg = mHandler.obtainMessage();
-                    msg.what = 1;
-                    alpha-=0.01f;
-                    msg.obj =alpha ;
-                    mHandler.sendMessage(msg);
-                }
-            }
-        }).start();
     }
 
 
