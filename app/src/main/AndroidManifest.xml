@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.dibage.accountb">
+    package="com.example.licoba.guanjia">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -18,46 +18,46 @@
         android:required="true" />
 
     <application
-        android:name=".applications.MyApplication"
+        android:name="com.example.licoba.guanjia.applications.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/accountb"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/AppTheme">
-        <activity android:name=".activitys.LoginActivity">
+        <activity android:name="com.example.licoba.guanjia.activitys.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activitys.RegisterActivity" />
-        <activity android:name=".activitys.MainActivity" >
+        <activity android:name="com.example.licoba.guanjia.activitys.RegisterActivity" />
+        <activity android:name="com.example.licoba.guanjia.activitys.MainActivity" >
 
         </activity>
         <activity
-            android:name=".activitys.AddGoodsActivity"
+            android:name="com.example.licoba.guanjia.activitys.AddGoodsActivity"
             android:windowSoftInputMode="stateVisible|adjustPan" />
-        <activity android:name=".activitys.MoreActivity" />
-        <activity android:name=".activitys.ValidateActivity" />
+        <activity android:name="com.example.licoba.guanjia.activitys.MoreActivity" />
+        <activity android:name="com.example.licoba.guanjia.activitys.ValidateActivity" />
         <activity
-            android:name=".activitys.SearchActivity"
+            android:name="com.example.licoba.guanjia.activitys.SearchActivity"
             android:windowSoftInputMode="stateVisible|adjustPan" />
-        <activity android:name=".activitys.SettingPasswordActivity" />
-        <activity android:name=".activitys.AddPhotoActivity" />
-        <activity android:name=".activitys.ModifyPasswordActivity" />
-        <activity android:name=".activitys.GuideActivity">
+        <activity android:name="com.example.licoba.guanjia.activitys.SettingPasswordActivity" />
+        <activity android:name="com.example.licoba.guanjia.activitys.AddPhotoActivity" />
+        <activity android:name="com.example.licoba.guanjia.activitys.ModifyPasswordActivity" />
+        <activity android:name="com.example.licoba.guanjia.activitys.GuideActivity">
 
         </activity>
-        <activity android:name=".activitys.CardActivity" />
-        <activity android:name=".activitys.EditGoodsActivity" />
-        <activity android:name=".activitys.CardDetailActivity" />
-        <activity android:name=".activitys.RecorveyActivity" />
-        <activity android:name=".base.BaseActivity" />
+        <activity android:name="com.example.licoba.guanjia.activitys.CardActivity" />
+        <activity android:name="com.example.licoba.guanjia.activitys.EditGoodsActivity" />
+        <activity android:name="com.example.licoba.guanjia.activitys.CardDetailActivity" />
+        <activity android:name="com.example.licoba.guanjia.activitys.RecorveyActivity" />
+        <activity android:name="com.example.licoba.guanjia.base.BaseActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.example.dibage.accountb.fileprovider"
+            android:authorities="com.example.licoba.guanjia.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -65,7 +65,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".activitys.OpenSourceActivity" />
+        <activity android:name="com.example.licoba.guanjia.activitys.OpenSourceActivity" />
     </application>
 
 </manifest>

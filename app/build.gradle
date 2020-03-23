@@ -3,11 +3,11 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.example.dibage.accountb"
+        applicationId "com.example.licoba.guanjia"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -48,7 +48,7 @@ dependencies {
     greendao {
         schemaVersion 1
         //greenDAO自动生成的类所在的包名
-        daoPackage 'com.example.dibage.accountb.dao'
+        daoPackage 'com.example.licoba.guanjia.dao'
         //自动生成的所有资源会被保存到这个位置
         targetGenDir 'src/main/java'
     }
