@@ -1,10 +1,13 @@
 package com.example.dibage.accountb.entitys;
 
+import java.io.Serializable;
+
 /**
  * Created by zjw on 2020/3/12.
  */
-public class User {
+public class User implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     /**
      * _id : 5e68ce69aa0652e5cb5994a9
      * username : licoba

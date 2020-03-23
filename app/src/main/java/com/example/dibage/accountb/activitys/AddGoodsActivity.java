@@ -243,6 +243,8 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
                                 Toasty.success(AddGoodsActivity.this,msg).show();
                                 new Handler().postDelayed(new Runnable() {
                                     public void run() {
+                                        Intent intent = new Intent();
+                                        AddGoodsActivity.this.setResult(RESULT_OK, intent);//RESULT_OK为自定义常量
                                         AddGoodsActivity.this.finish();
                                     }
                                 }, 400);

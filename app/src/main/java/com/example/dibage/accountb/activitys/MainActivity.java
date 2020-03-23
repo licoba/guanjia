@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -52,6 +53,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
+import ezy.ui.layout.LoadingLayout;
 import retrofit2.Call;
 
 import static com.example.dibage.accountb.activitys.MoreActivity.RECORVRY_DATA;
@@ -72,17 +74,17 @@ public class MainActivity extends AppCompatActivity {
     List<Goods> goodsList;
     QueryBuilder<Goods> qb;
     GoodsAdapter mGoodsAdapter;
-
+    LoadingLayout loadingLayout;
     GoodsDao mGoodsDao;
     SmartRefreshLayout refreshLayout;
     Context mContext;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         initFBI();
-//        initData();
         initView();
         initEvent();
     }
@@ -126,8 +128,9 @@ public class MainActivity extends AppCompatActivity {
                                 Log.d("返回：","拉取数据成功");
                                 goodsList.clear();
                                 goodsList.addAll(goodsResponseBean.getData());
-                                reloadView();
+//                                reloadView();
                                 refreshLayout.finishRefresh(true);
+                                loadingLayout.showContent();
                             }else{
                                 Log.d("返回：","拉取数据失败");
                                 refreshLayout.finishRefresh(false);
@@ -156,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initFBI() {
+        mContext = MainActivity.this;
         floatingActionMenu = findViewById(R.id.fabMenu);
         fabAddAccount = findViewById(R.id.fabAddAcount);
         fabAddIdCard = findViewById(R.id.fabAddIdCard);
@@ -163,7 +167,9 @@ public class MainActivity extends AppCompatActivity {
         ll_empty = findViewById(R.id.ll_empty);
         toolbar = findViewById(R.id.toolbar);
         refreshLayout = findViewById(R.id.refreshLayout);
-        mContext = MainActivity.this;
+        loadingLayout = findViewById(R.id.loadingLayout);
+
+
     }
 
 
@@ -181,11 +187,12 @@ public class MainActivity extends AppCompatActivity {
             mGoodsAdapter = new GoodsAdapter(R.layout.item_goods,goodsList);
         mGoodsAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN );//开启加载动画 （渐显、缩放、从下到上，从左到右、从右到左）
         recyclerView.setAdapter(mGoodsAdapter);
-
         if(mGoodsAdapter!=null)
             mGoodsAdapter.notifyDataSetChanged();
         ll_empty.setVisibility(View.GONE);
-
+        refreshLayout.setEnableOverScrollDrag(true);
+        refreshLayout.setEnableOverScrollBounce(true);
+        loadingLayout.showEmpty();
     }
 
     @Override
@@ -199,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG,"onResume了");
+        Log.e(TAG,"onResume了");
     }
 
     //浮动添加按钮的监听器
@@ -257,4 +264,14 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==ADD_ACCOUNT){
+            if(resultCode==RESULT_OK) {
+                Log.e(TAG, "要刷新数据了");
+                refreshLayout.autoRefresh();
+            }
+        }
+    }
 }

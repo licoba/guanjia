@@ -88,4 +88,6 @@ dependencies {
 
     // 炫酷的下拉刷新
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.2'
+    // 页面多状态布局
+    implementation 'com.github.czy1121:loadinglayout:1.0.1'
 }

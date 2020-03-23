@@ -11,6 +11,13 @@
         <!--去掉系统默认的标题栏，隐藏actionbar-->
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+        <item name="styleLoadingLayout">@style/LoadingLayoutStyle</item>
+    </style>
+
+    <style name="LoadingLayoutStyle" parent="LoadingLayout.Style">
+        <item name="llEmptyImage">@mipmap/empty</item>
+        <item name="llErrorImage">@mipmap/error</item>
+        ...
     </style>
 
     <style name="toolbar_theme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">

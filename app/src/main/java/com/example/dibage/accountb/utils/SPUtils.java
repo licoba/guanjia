@@ -3,6 +3,8 @@ package com.example.dibage.accountb.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -45,7 +47,8 @@ public class SPUtils
             editor.putLong(key, (Long) object);
         } else
         {
-            editor.putString(key, object.toString());
+            String toJson = new Gson().toJson(object);
+            editor.putString(key, toJson);
         }
 
         SharedPreferencesCompat.apply(editor);
@@ -79,9 +82,10 @@ public class SPUtils
         } else if (defaultObject instanceof Long)
         {
             return sp.getLong(key, (Long) defaultObject);
+        }else{//为object类型
+            return sp.getString(key, (String) defaultObject);
         }
 
-        return null;
     }
 
     /**

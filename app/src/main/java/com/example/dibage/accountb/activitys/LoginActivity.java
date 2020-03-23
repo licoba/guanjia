@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.dibage.accountb.R;
@@ -16,7 +17,9 @@ import com.example.dibage.accountb.entitys.ResponseBean;
 import com.example.dibage.accountb.entitys.User;
 import com.example.dibage.accountb.services.ApiService;
 import com.example.dibage.accountb.utils.RetrofitManager;
+import com.example.dibage.accountb.utils.SPUtils;
 import com.example.dibage.accountb.utils.ThreadUtils;
+import com.google.gson.Gson;
 import com.hss01248.dialog.StyledDialog;
 
 import java.io.IOException;
@@ -30,7 +33,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText etPwd;
     Button btnLogin;
     TextView btnToRegister;
-    Handler handler;
+    LinearLayout qqLayout;
+    LinearLayout weixinLayout;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -52,6 +56,19 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(LoginActivity.this,RegisterActivity.class));
+            }
+        });
+
+        weixinLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toasty.warning(LoginActivity.this,"功能正在开发中").show();
+            }
+        });
+        qqLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toasty.warning(LoginActivity.this,"功能正在开发中").show();
             }
         });
     }
@@ -95,13 +112,13 @@ public class LoginActivity extends AppCompatActivity {
                             if(user == null){
                                 Toasty.warning(LoginActivity.this,msg).show();
                             }else{
+                                Log.e(TAG,"保存的user："+user.toString());
+                                SPUtils.put(LoginActivity.this,"localUser",user);
                                 startActivity(new Intent(LoginActivity.this,MainActivity.class));
                                 LoginActivity.this.finish();
                             }
                         }
                     });
-
-
                 } catch (IOException e) {
                     Log.e(TAG,"请求抛异常了");
                     e.printStackTrace();
@@ -113,7 +130,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initData() {
         //handler 处理返回的请求结果
-
+        String userString = (String) SPUtils.get(LoginActivity.this,"localUser",null);
+//        Log.e("userString",userString);
+        if(userString!=null){
+            User user =new Gson().fromJson(userString,User.class);
+            Log.e("AAAA",SPUtils.get(LoginActivity.this,"localUser",null).toString());
+            etName.setText(user.getPhone());
+            etPwd.setText(user.getPassword());
+        }
     }
 
     private void initView() {
@@ -125,5 +149,7 @@ public class LoginActivity extends AppCompatActivity {
         etPwd = findViewById(R.id.etPwd);
         btnLogin = findViewById(R.id.btn_login);
         btnToRegister = findViewById(R.id.tvRegister);
+        qqLayout = findViewById(R.id.qqLayout);
+        weixinLayout = findViewById(R.id.wechatLayout);
     }
 }
