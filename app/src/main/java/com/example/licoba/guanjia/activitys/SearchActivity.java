@@ -73,15 +73,15 @@ public class SearchActivity extends AppCompatActivity {
             //获取dao实例
             //获取dao实例
             DaoSession daoSession = ((MyApplication) getApplication()).getDaoSession();
-            GoodsDao mGoodsDao = daoSession.getGoodsDao();
+
             //获取queryBuilder，通过queryBuilder来实现查询功能
-            QueryBuilder<Goods> qb = mGoodsDao.queryBuilder();
+
             WhereCondition whereCondition1 = GoodsDao.Properties.Name.like('%' + s + '%');
             WhereCondition whereCondition2 = GoodsDao.Properties.Category.like('%' + s + '%');
-            qb.whereOr(whereCondition1, whereCondition2);
-            qb.orderAsc(GoodsDao.Properties.Name, GoodsDao.Properties.Category);
+//            qb.whereOr(whereCondition1, whereCondition2);
+//            qb.orderAsc(GoodsDao.Properties.Name, GoodsDao.Properties.Category);
             mGoodsList.clear();
-            mGoodsList.addAll(qb.list());
+//            mGoodsList.addAll(qb.list());
             Log.e("SA结果:", mGoodsList.toString());
             Log.e("SA结果总数:", mGoodsList.size() + "");
             tv_tip.setVisibility(View.GONE);
@@ -149,15 +149,15 @@ public class SearchActivity extends AppCompatActivity {
                 //获取dao实例
                 //获取dao实例
                 DaoSession daoSession = ((MyApplication) getApplication()).getDaoSession();
-                GoodsDao mGoodsDao = daoSession.getGoodsDao();
+//                GoodsDao mGoodsDao = daoSession.getGoodsDao();
                 //获取queryBuilder，通过queryBuilder来实现查询功能
-                QueryBuilder<Goods> qb = mGoodsDao.queryBuilder();
+//                QueryBuilder<Goods> qb = mGoodsDao.queryBuilder();
                 WhereCondition whereCondition1 = GoodsDao.Properties.Name.like('%' + s + '%');
                 WhereCondition whereCondition2 = GoodsDao.Properties.Category.like('%' + s + '%');
-                qb.whereOr(whereCondition1, whereCondition2);
-                qb.orderAsc(GoodsDao.Properties.Name, GoodsDao.Properties.Category);
+//                qb.whereOr(whereCondition1, whereCondition2);
+//                qb.orderAsc(GoodsDao.Properties.Name, GoodsDao.Properties.Category);
                 mGoodsList.clear();
-                mGoodsList.addAll(qb.list());
+//                mGoodsList.addAll(qb.list());
                 Log.e("SA结果:", mGoodsList.toString());
                 Log.e("SA结果总数:", mGoodsList.size() + "");
                 tv_tip.setVisibility(View.GONE);

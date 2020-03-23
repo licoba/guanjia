@@ -13,11 +13,11 @@ import java.io.Serializable;
  */
 
 //注解实体类Goods
-@Entity
+
 public class Goods implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Id(autoincrement = true)
-    private Long id;
+    @NotNull
+    private String _id;
     @NotNull
     private String name;//货物名称
     @NotNull
@@ -30,10 +30,10 @@ public class Goods implements Serializable {
     private String remark;//描述
     private String firstchar;//名称的首字母
     private String adddate;//添加日期
-    @Generated(hash = 614867072)
-    public Goods(Long id, @NotNull String name, int remain, int sold, @NotNull String category, float price, String remark,
+
+    public Goods(String id, @NotNull String name, int remain, int sold, @NotNull String category, float price, String remark,
             String firstchar, String adddate) {
-        this.id = id;
+        this._id = id;
         this.name = name;
         this.remain = remain;
         this.sold = sold;
@@ -81,11 +81,11 @@ public class Goods implements Serializable {
     @Generated(hash = 1770709345)
     public Goods() {
     }
-    public Long getId() {
-        return this.id;
+    public String getId() {
+        return this._id;
     }
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(String id) {
+        this._id = id;
     }
     public String getName() {
         return this.name;

@@ -1,9 +1,11 @@
 package com.example.licoba.guanjia.activitys;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,11 +20,19 @@ import com.example.licoba.guanjia.commonView.PopWindowTip;
 import com.example.licoba.guanjia.dao.DaoSession;
 import com.example.licoba.guanjia.dao.GoodsDao;
 import com.example.licoba.guanjia.entitys.Goods;
+import com.example.licoba.guanjia.entitys.ResponseBean;
+import com.example.licoba.guanjia.services.ApiService;
 import com.example.licoba.guanjia.utils.AccountUtils;
 import com.example.licoba.guanjia.utils.DateUtils;
+import com.example.licoba.guanjia.utils.RetrofitManager;
 import com.example.licoba.guanjia.utils.SimpleUtils;
+import com.example.licoba.guanjia.utils.ThreadUtils;
+import com.hss01248.dialog.StyledDialog;
+
+import java.io.IOException;
 
 import es.dmoral.toasty.Toasty;
+import retrofit2.Call;
 
 //编辑库存
 public class EditGoodsActivity extends AppCompatActivity implements View.OnClickListener{
@@ -63,7 +73,7 @@ public class EditGoodsActivity extends AppCompatActivity implements View.OnClick
 
     private void initData() {
         daoSession = ((MyApplication)getApplication()).getDaoSession();
-        mGoodsDao = daoSession.getGoodsDao();
+
         mGoods = (Goods) getIntent().getSerializableExtra("account_data");
     }
 
@@ -130,7 +140,6 @@ public class EditGoodsActivity extends AppCompatActivity implements View.OnClick
                                 msg = "保存成功";
                                 VertifyState = true;
                                 if(!ModifyRecord()) return;
-                                EditGoodsActivity.this.finish();
                             }
                             else
                                 msg="请填写产品种类";
@@ -226,14 +235,50 @@ public class EditGoodsActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void clickConfirm() {
-                mGoodsDao.delete(mGoods);
-                Toasty.success(EditGoodsActivity.this, "删除成功", Toast.LENGTH_SHORT, false).show();
-                new Handler().postDelayed(new Runnable() {
-                    public void run(){
-                        EditGoodsActivity.this.finish();
+//                mGoodsDao.delete(mGoods);
+                Goods toDeleteGoods = mGoods;
+                StyledDialog.buildLoading("正在删除……").show();
+                ApiService apiService = RetrofitManager.getInstance().createService(ApiService.class);
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.e("删除id：",toDeleteGoods.getId());
+                        Call<ResponseBean<Object>> goodsCall = apiService.deleteGoods(toDeleteGoods);
+                        try {
+                            ResponseBean<Object> goodsResponseBean= goodsCall.execute().body();
+                            Log.d("返回：",goodsResponseBean.toString());
+                            final int code = goodsResponseBean.getCode();
+                            final String msg = goodsResponseBean.getMsg();
+                            final Object data = goodsResponseBean.getData();
+                            new Handler(EditGoodsActivity.this.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    StyledDialog.dismissLoading(EditGoodsActivity.this);
+                                    if(code != 1){
+                                        Toasty.warning(EditGoodsActivity.this,msg).show();
+                                        StyledDialog.dismissLoading(EditGoodsActivity.this);
+                                        Toasty.warning(EditGoodsActivity.this,"删除失败，请稍后再试").show();
+                                    }else{
+                                        Toasty.success(EditGoodsActivity.this,msg).show();
+                                        new Handler().postDelayed(new Runnable() {
+                                            public void run() {
+                                                Intent intent = new Intent();
+                                                EditGoodsActivity.this.setResult(RESULT_OK, intent);//RESULT_OK为自定义常量
+                                                EditGoodsActivity.this.finish();
+                                            }
+                                        }, 400);
+                                    }
+                                }
+                            });
+                        } catch (IOException e) {
+                            StyledDialog.dismissLoading(EditGoodsActivity.this);
+                            Toasty.warning(EditGoodsActivity.this,"删除失败，请稍后再试").show();
+                            Log.e("AddGoodsActivity","请求抛异常了");
+                            e.printStackTrace();
+                        }
                     }
-                }, 300);
-
+                };
+                ThreadUtils.getCachedPool().execute(runnable);
             }
         };
 

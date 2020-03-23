@@ -15,7 +15,7 @@ import com.example.licoba.guanjia.entitys.Goods;
 /** 
  * DAO for table "GOODS".
 */
-public class GoodsDao extends AbstractDao<Goods, Long> {
+public class GoodsDao extends AbstractDao<Goods, Void> {
 
     public static final String TABLENAME = "GOODS";
 
@@ -24,7 +24,7 @@ public class GoodsDao extends AbstractDao<Goods, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, String.class, "id", false, "ID");
         public final static Property Name = new Property(1, String.class, "name", false, "NAME");
         public final static Property Remain = new Property(2, int.class, "remain", false, "REMAIN");
         public final static Property Sold = new Property(3, int.class, "sold", false, "SOLD");
@@ -48,7 +48,7 @@ public class GoodsDao extends AbstractDao<Goods, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"GOODS\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
+                "\"ID\" TEXT NOT NULL ," + // 0: id
                 "\"NAME\" TEXT NOT NULL ," + // 1: name
                 "\"REMAIN\" INTEGER NOT NULL ," + // 2: remain
                 "\"SOLD\" INTEGER NOT NULL ," + // 3: sold
@@ -68,11 +68,7 @@ public class GoodsDao extends AbstractDao<Goods, Long> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, Goods entity) {
         stmt.clearBindings();
- 
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
-        }
+        stmt.bindString(1, entity.getId());
         stmt.bindString(2, entity.getName());
         stmt.bindLong(3, entity.getRemain());
         stmt.bindLong(4, entity.getSold());
@@ -98,11 +94,7 @@ public class GoodsDao extends AbstractDao<Goods, Long> {
     @Override
     protected final void bindValues(SQLiteStatement stmt, Goods entity) {
         stmt.clearBindings();
- 
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
-        }
+        stmt.bindString(1, entity.getId());
         stmt.bindString(2, entity.getName());
         stmt.bindLong(3, entity.getRemain());
         stmt.bindLong(4, entity.getSold());
@@ -126,14 +118,14 @@ public class GoodsDao extends AbstractDao<Goods, Long> {
     }
 
     @Override
-    public Long readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
+    public Void readKey(Cursor cursor, int offset) {
+        return null;
     }    
 
     @Override
     public Goods readEntity(Cursor cursor, int offset) {
         Goods entity = new Goods( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+            cursor.getString(offset + 0), // id
             cursor.getString(offset + 1), // name
             cursor.getInt(offset + 2), // remain
             cursor.getInt(offset + 3), // sold
@@ -148,7 +140,7 @@ public class GoodsDao extends AbstractDao<Goods, Long> {
      
     @Override
     public void readEntity(Cursor cursor, Goods entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setId(cursor.getString(offset + 0));
         entity.setName(cursor.getString(offset + 1));
         entity.setRemain(cursor.getInt(offset + 2));
         entity.setSold(cursor.getInt(offset + 3));
@@ -160,23 +152,20 @@ public class GoodsDao extends AbstractDao<Goods, Long> {
      }
     
     @Override
-    protected final Long updateKeyAfterInsert(Goods entity, long rowId) {
-        entity.setId(rowId);
-        return rowId;
+    protected final Void updateKeyAfterInsert(Goods entity, long rowId) {
+        // Unsupported or missing PK type
+        return null;
     }
     
     @Override
-    public Long getKey(Goods entity) {
-        if(entity != null) {
-            return entity.getId();
-        } else {
-            return null;
-        }
+    public Void getKey(Goods entity) {
+        return null;
     }
 
     @Override
     public boolean hasKey(Goods entity) {
-        return entity.getId() != null;
+        // TODO
+        return false;
     }
 
     @Override

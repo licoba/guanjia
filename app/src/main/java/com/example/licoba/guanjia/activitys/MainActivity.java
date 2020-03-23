@@ -49,6 +49,7 @@ import static com.example.licoba.guanjia.activitys.MoreActivity.RECORVRY_DATA;
 public class MainActivity extends AppCompatActivity {
     final String TAG = "MainActivity";
     public static final int ADD_ACCOUNT = 1;
+    public static final int EDIT_GOODS = 2;
     Context context = MainActivity.this;
     static boolean isPause = false;
     private FloatingActionMenu floatingActionMenu;
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(MainActivity.this, EditGoodsActivity.class);
                 intent.putExtra("account_data", (goodsList.get(position)));
-                startActivity(intent);
+                startActivityForResult(intent,EDIT_GOODS);
             }
         });
 
@@ -116,9 +117,12 @@ public class MainActivity extends AppCompatActivity {
                                 Log.d("返回：","拉取数据成功");
                                 goodsList.clear();
                                 goodsList.addAll(goodsResponseBean.getData());
-//                                reloadView();
+                                mGoodsAdapter.notifyDataSetChanged();
                                 refreshLayout.finishRefresh(true);
-                                loadingLayout.showContent();
+                                if(goodsList.size()>0)
+                                    loadingLayout.showContent();
+                                else
+                                    loadingLayout.showEmpty();
                             }else{
                                 Log.d("返回：","拉取数据失败");
                                 refreshLayout.finishRefresh(false);
@@ -136,15 +140,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public  void reloadView(){
-        if (goodsList.size() > 0) {
-            ll_empty.setVisibility(View.GONE);
-        } else {
-            ll_empty.setVisibility(View.VISIBLE);
-        }
-        if(mGoodsAdapter!=null)
-            mGoodsAdapter.notifyDataSetChanged();
-    }
 
     private void initFBI() {
         mContext = MainActivity.this;
@@ -256,6 +251,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==ADD_ACCOUNT){
+            if(resultCode==RESULT_OK) {
+                Log.e(TAG, "要刷新数据了");
+                refreshLayout.autoRefresh();
+            }
+        }else  if(requestCode==EDIT_GOODS){
             if(resultCode==RESULT_OK) {
                 Log.e(TAG, "要刷新数据了");
                 refreshLayout.autoRefresh();

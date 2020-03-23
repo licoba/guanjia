@@ -59,7 +59,6 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
     Toolbar toolbar;
     DaoSession daoSession ;
     AccountDao mAccountDao;
-    GoodsDao mGoodsDao;
     private PopupWindow mPopupWindow;
 
     int length = 12;
@@ -94,7 +93,6 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
 
     private void initData() {
         daoSession = ((MyApplication)getApplication()).getDaoSession();
-        mGoodsDao = daoSession.getGoodsDao();
     }
 
     private void initEvent() {

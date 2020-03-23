@@ -39,4 +39,9 @@ public interface  ApiService {
     @Headers({"Content-Type: application/json"})
     Call<ResponseBean<Goods>> addGoods(@Body Goods goods);
 
+    //删除货物
+    @POST("goods/delete")
+    @Headers({"Content-Type: application/json"})
+    Call<ResponseBean<Object>> deleteGoods(@Body Goods goods);
+
 }
