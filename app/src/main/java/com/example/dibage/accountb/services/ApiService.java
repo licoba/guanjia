@@ -1,7 +1,10 @@
 package com.example.dibage.accountb.services;
 
+import com.example.dibage.accountb.entitys.Goods;
 import com.example.dibage.accountb.entitys.ResponseBean;
 import com.example.dibage.accountb.entitys.User;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -25,5 +28,10 @@ public interface  ApiService {
     @Headers({"Content-Type: application/json"})
     Call<ResponseBean<User>> register(@Body User user);
 
+
+    //查询所有货物
+    @POST("goods/all")
+    @Headers({"Content-Type: application/json"})
+    Call<ResponseBean<List<Goods>>> allGoods();
 
 }

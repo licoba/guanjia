@@ -16,57 +16,63 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/toolbar_theme">
-
-
-        </android.support.v7.widget.Toolbar>
+            android:theme="@style/toolbar_theme"></android.support.v7.widget.Toolbar>
 
         <ImageView
             android:id="@+id/btn_add"
-            android:clickable="true"
-            android:visibility="invisible"
-            android:layout_marginRight="18dp"
-            android:layout_gravity="right|center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="18dp"
+            android:clickable="true"
             android:src="@mipmap/add"
-            />
+            android:visibility="invisible" />
     </FrameLayout>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_marginTop="5dp"
         android:layout_height="match_parent">
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
 
-    </android.support.v7.widget.RecyclerView>
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/refreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srlAccentColor="@android:color/white"
+            app:srlEnablePreviewInEditMode="true"
+            app:srlPrimaryColor="#444444">
+
+            <com.scwang.smartrefresh.layout.header.ClassicsHeader
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
         <LinearLayout
             android:id="@+id/ll_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:orientation="vertical">
 
             <ImageView
-                android:layout_gravity="center"
-                android:scaleType="fitXY"
                 android:layout_width="80dp"
                 android:layout_height="65dp"
-                android:src="@mipmap/empty"
-                />
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:src="@mipmap/empty" />
+
             <TextView
-                android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:text="空空如也"
                 android:textColor="#CDCDCD"
-                android:textSize="14sp"
-                />
+                android:textSize="14sp" />
 
         </LinearLayout>
 
@@ -75,8 +81,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
-            android:layout_marginBottom="16dp"
             android:layout_marginRight="20dp"
+            android:layout_marginBottom="16dp"
             android:src="@mipmap/add"
             app:menu_colorNormal="@color/colorPrimary"
             app:menu_colorPressed="@color/colorPrimaryDark">

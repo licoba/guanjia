@@ -86,4 +86,6 @@ dependencies {
         exclude group: 'com.android.support'
     }
 
+    // 炫酷的下拉刷新
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.2'
 }
