@@ -20,5 +20,10 @@ public interface  ApiService {
     Call<ResponseBean<User>> login(@Body User user);
 
 
+    //注册
+    @POST("user/register")
+    @Headers({"Content-Type: application/json"})
+    Call<ResponseBean<User>> register(@Body User user);
+
 
 }

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.dibage.accountb.R;
 import com.example.dibage.accountb.entitys.ResponseBean;
@@ -28,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText etName;
     EditText etPwd;
     Button btnLogin;
+    TextView btnToRegister;
     Handler handler;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +45,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 doLogin();
+            }
+        });
+
+        btnToRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this,RegisterActivity.class));
             }
         });
     }
@@ -87,6 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Toasty.warning(LoginActivity.this,msg).show();
                             }else{
                                 startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                                LoginActivity.this.finish();
                             }
                         }
                     });
@@ -103,18 +113,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initData() {
         //handler 处理返回的请求结果
-        handler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                Bundle data = msg.getData();
-                String val = data.getString("value");
-                //
-                // TODO: 更新界面
-                //
-                Log.i("mylog","请求结果-->" + val);
-            }
-        };
 
     }
 
@@ -126,5 +124,6 @@ public class LoginActivity extends AppCompatActivity {
         etName = findViewById(R.id.etPhone);
         etPwd = findViewById(R.id.etPwd);
         btnLogin = findViewById(R.id.btn_login);
+        btnToRegister = findViewById(R.id.tvRegister);
     }
 }
