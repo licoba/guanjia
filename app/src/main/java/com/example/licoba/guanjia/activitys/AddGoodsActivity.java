@@ -268,6 +268,7 @@ public class AddGoodsActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.btn_clear4:
                 et_price.setText("");
+                break;
             case R.id.btn_clear5:
                 et_remarks.setText("");
                 break;

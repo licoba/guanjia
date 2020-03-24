@@ -193,6 +193,8 @@
                     android:hint="请输入产品的库存量"
                     android:singleLine="true"
                     android:textSize="16sp"
+                    android:maxLength="7"
+                    android:inputType="number"
                     android:background="@null"
                     android:layout_height="wrap_content" />
 
@@ -248,6 +250,8 @@
                     android:layout_marginLeft="10dp"
                     android:hint="请输入已售待出库的数量"
                     android:singleLine="true"
+                    android:maxLength="7"
+                    android:inputType="number"
                     android:textSize="16sp"
                     android:background="@null"
                     android:layout_height="wrap_content" />
@@ -305,6 +309,8 @@
                     android:hint="(可选填)"
                     android:singleLine="true"
                     android:textSize="16sp"
+                    android:maxLength="7"
+                    android:inputType="numberDecimal"
                     android:background="@null"
                     android:layout_height="wrap_content" />
 

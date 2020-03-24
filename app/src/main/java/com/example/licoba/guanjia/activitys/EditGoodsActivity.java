@@ -185,12 +185,48 @@ public class EditGoodsActivity extends AppCompatActivity implements View.OnClick
             return false;
         }
 
-
-        Goods goods = new Goods(mGoods.getId(),name,remain,sold,category,price,remark,firstChar,adddate);
-        mGoodsDao.update(goods);
-
+        Goods toSaveGoods = new Goods(mGoods.getId(),name,remain,sold,category,price,remark,firstChar,adddate);
+        StyledDialog.buildLoading("正在保存……").show();
+        ApiService apiService = RetrofitManager.getInstance().createService(ApiService.class);
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                Call<ResponseBean<Object>> goodsCall = apiService.updateGoods(toSaveGoods);
+                try {
+                    ResponseBean<Object> goodsResponseBean= goodsCall.execute().body();
+                    Log.d("返回：",goodsResponseBean.toString());
+                    final int code = goodsResponseBean.getCode();
+                    final String msg = goodsResponseBean.getMsg();
+                    new Handler(EditGoodsActivity.this.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            StyledDialog.dismissLoading(EditGoodsActivity.this);
+                            if(code != 1){
+                                Toasty.warning(EditGoodsActivity.this,msg).show();
+                                StyledDialog.dismissLoading(EditGoodsActivity.this);
+                                Toasty.warning(EditGoodsActivity.this,"保存失败，请稍后再试").show();
+                            }else{
+                                Toasty.success(EditGoodsActivity.this,msg).show();
+                                new Handler().postDelayed(new Runnable() {
+                                    public void run() {
+                                        Intent intent = new Intent();
+                                        EditGoodsActivity.this.setResult(RESULT_OK, intent);//RESULT_OK为自定义常量
+                                        EditGoodsActivity.this.finish();
+                                    }
+                                }, 400);
+                            }
+                        }
+                    });
+                } catch (IOException e) {
+                    StyledDialog.dismissLoading(EditGoodsActivity.this);
+                    Toasty.warning(EditGoodsActivity.this,"保存失败，请稍后再试").show();
+                    Log.e("AddGoodsActivity","请求抛异常了");
+                    e.printStackTrace();
+                }
+            }
+        };
+        ThreadUtils.getCachedPool().execute(runnable);
         return  true;
-
     }
 
     @Override
@@ -207,14 +243,13 @@ public class EditGoodsActivity extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.btn_clear4:
                 et_price.setText("");
+                break;
             case R.id.btn_clear5:
                 et_remarks.setText("");
                 break;
             case R.id.btn_clear6:
                 et_sold.setText("");
                 break;
-            case R.id.btn_getRandom:
-                ;
             case R.id.btn_delete:
                 showDeleteDialog();
                 break;
@@ -235,7 +270,7 @@ public class EditGoodsActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void clickConfirm() {
-//                mGoodsDao.delete(mGoods);
+
                 Goods toDeleteGoods = mGoods;
                 StyledDialog.buildLoading("正在删除……").show();
                 ApiService apiService = RetrofitManager.getInstance().createService(ApiService.class);
