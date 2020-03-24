@@ -74,15 +74,15 @@ public class MyApplication extends Application {
         Database db =  helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
         // https://bugly.qq.com/docs/user-guide/advance-features-android-beta/
-        Bugly.init(getApplicationContext(), "de2ab8e07a", false);
+
 //        Beta.autoInit = true; // 自动初始化开关
-        Beta.autoCheckUpgrade = false; // 自动检查更新开关
+        Beta.autoCheckUpgrade = true; // 自动检查更新开关
         Beta.upgradeCheckPeriod = 1000; // 升级检查周期设置
         Beta.initDelay = 1000;
 //        Beta.autoDownloadOnWifi = true;
 //        Beta.showInterruptedStrategy = true;//设置点击过确认的弹窗在App下次启动自动检查更新时会再次显示。
 //        Beta.canShowUpgradeActs.add(MainActivity.class);//只允许在MainActivity上显示更新弹窗，其他activity上不显示弹窗; 如果不设置默认所有activity都可以显示弹窗。
-
+        Bugly.init(getApplicationContext(), "de2ab8e07a", false);
         StyledDialog.init(this);
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
