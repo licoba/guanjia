@@ -3,6 +3,7 @@ package com.example.licoba.guanjia.activitys;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,7 +24,11 @@ import com.example.licoba.guanjia.dao.DaoSession;
 import com.example.licoba.guanjia.dao.GoodsDao;
 import com.example.licoba.guanjia.entitys.Account;
 import com.example.licoba.guanjia.entitys.Goods;
+import com.example.licoba.guanjia.msg.MessageEvent;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.greenrobot.greendao.query.QueryBuilder;
 import org.greenrobot.greendao.query.WhereCondition;
 
@@ -70,20 +75,15 @@ public class SearchActivity extends AppCompatActivity {
         String s;
         s = et_search.getText().toString().trim();
         if (!s.equals("")) {
-            //获取dao实例
-            //获取dao实例
-            DaoSession daoSession = ((MyApplication) getApplication()).getDaoSession();
-
-            //获取queryBuilder，通过queryBuilder来实现查询功能
-
-            WhereCondition whereCondition1 = GoodsDao.Properties.Name.like('%' + s + '%');
-            WhereCondition whereCondition2 = GoodsDao.Properties.Category.like('%' + s + '%');
-//            qb.whereOr(whereCondition1, whereCondition2);
-//            qb.orderAsc(GoodsDao.Properties.Name, GoodsDao.Properties.Category);
+            List<Goods> resultList = new ArrayList<>();
+            for (int i = 0; i < MyApplication.goodsList.size(); i++) {
+                Goods goods = MyApplication.goodsList.get(i);
+                if(goods.getName().contains(s)||goods.getCategory().contains(s)){
+                    resultList.add(goods);
+                }
+            }
             mGoodsList.clear();
-//            mGoodsList.addAll(qb.list());
-            Log.e("SA结果:", mGoodsList.toString());
-            Log.e("SA结果总数:", mGoodsList.size() + "");
+            mGoodsList.addAll(resultList);
             tv_tip.setVisibility(View.GONE);
             if(mGoodsList.size()==0){
                 tv_tip.setText("抱歉，无匹配记录");
@@ -105,15 +105,29 @@ public class SearchActivity extends AppCompatActivity {
 
     public void initEvent(){
 
-        Log.d("AAA","点击了item");
+        EventBus.getDefault().register(this);
         mGoodsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(SearchActivity.this, EditGoodsActivity.class);
                 intent.putExtra("account_data", (mGoodsList.get(position)));
-                startActivity(intent);
+                startActivityForResult(intent,1);
             }
         });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void receiveDataUpdate(MessageEvent messageEvent) {
+        if(messageEvent.getContext().getClass().isAssignableFrom(MainActivity.class)) {
+            initData();
+            Log.e("SearchActivity","响应数据更新事件");
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     class mTextWatcher implements TextWatcher {
@@ -146,20 +160,16 @@ public class SearchActivity extends AppCompatActivity {
             s = editable.toString().trim();
             Log.e("SA输入字符：", s);
             if (!s.equals("")) {
-                //获取dao实例
-                //获取dao实例
-                DaoSession daoSession = ((MyApplication) getApplication()).getDaoSession();
-//                GoodsDao mGoodsDao = daoSession.getGoodsDao();
-                //获取queryBuilder，通过queryBuilder来实现查询功能
-//                QueryBuilder<Goods> qb = mGoodsDao.queryBuilder();
-                WhereCondition whereCondition1 = GoodsDao.Properties.Name.like('%' + s + '%');
-                WhereCondition whereCondition2 = GoodsDao.Properties.Category.like('%' + s + '%');
-//                qb.whereOr(whereCondition1, whereCondition2);
-//                qb.orderAsc(GoodsDao.Properties.Name, GoodsDao.Properties.Category);
+                List<Goods> resultList = new ArrayList<>();
+                for (int i = 0; i < MyApplication.goodsList.size(); i++) {
+                        Goods goods = MyApplication.goodsList.get(i);
+                        if(goods.getName().contains(s)||goods.getCategory().contains(s)){
+                            resultList.add(goods);
+                        }
+                }
                 mGoodsList.clear();
-//                mGoodsList.addAll(qb.list());
-                Log.e("SA结果:", mGoodsList.toString());
-                Log.e("SA结果总数:", mGoodsList.size() + "");
+                mGoodsList.addAll(resultList);
+
                 tv_tip.setVisibility(View.GONE);
                 if(mGoodsList.size()==0){
                     tv_tip.setText("抱歉，无匹配记录");
@@ -181,10 +191,19 @@ public class SearchActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onResume() {
         super.onResume();
-        initData();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1)
+            if(resultCode==RESULT_OK){
+                MessageEvent messageEvent = new MessageEvent("数据更新了",SearchActivity.this);
+                EventBus.getDefault().post(messageEvent);
+            }
     }
 }

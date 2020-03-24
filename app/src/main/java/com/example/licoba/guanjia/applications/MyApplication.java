@@ -9,6 +9,7 @@ import com.example.licoba.guanjia.R;
 import com.example.licoba.guanjia.activitys.MainActivity;
 import com.example.licoba.guanjia.dao.DaoMaster;
 import com.example.licoba.guanjia.dao.DaoSession;
+import com.example.licoba.guanjia.entitys.Goods;
 import com.hss01248.dialog.ActivityStackManager;
 import com.hss01248.dialog.StyledDialog;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -21,6 +22,9 @@ import com.tencent.bugly.beta.Beta;
 
 import org.greenrobot.greendao.database.Database;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by dibage on 2018/3/27.
  */
@@ -30,6 +34,7 @@ import org.greenrobot.greendao.database.Database;
 public class MyApplication extends Application {
     private DaoSession daoSession;
 
+    public static List<Goods> goodsList = new ArrayList<>();
     private static  MyApplication instance;
     private static Context context;
     //static 代码段可以防止内存泄露
@@ -71,7 +76,7 @@ public class MyApplication extends Application {
         // https://bugly.qq.com/docs/user-guide/advance-features-android-beta/
         Bugly.init(getApplicationContext(), "de2ab8e07a", false);
 //        Beta.autoInit = true; // 自动初始化开关
-        Beta.autoCheckUpgrade = true; // 自动检查更新开关
+        Beta.autoCheckUpgrade = false; // 自动检查更新开关
         Beta.upgradeCheckPeriod = 1000; // 升级检查周期设置
         Beta.initDelay = 1000;
 //        Beta.autoDownloadOnWifi = true;

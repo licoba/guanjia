@@ -22,9 +22,11 @@ import android.widget.Toast;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.licoba.guanjia.R;
 import com.example.licoba.guanjia.adapters.GoodsAdapter;
+import com.example.licoba.guanjia.applications.MyApplication;
 import com.example.licoba.guanjia.dao.GoodsDao;
 import com.example.licoba.guanjia.entitys.Goods;
 import com.example.licoba.guanjia.entitys.ResponseBean;
+import com.example.licoba.guanjia.msg.MessageEvent;
 import com.example.licoba.guanjia.services.ApiService;
 import com.example.licoba.guanjia.utils.RetrofitManager;
 import com.example.licoba.guanjia.utils.ThreadUtils;
@@ -35,6 +37,9 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.io.IOException;
@@ -66,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
     QueryBuilder<Goods> qb;
     GoodsAdapter mGoodsAdapter;
     LoadingLayout loadingLayout;
-    GoodsDao mGoodsDao;
     SmartRefreshLayout refreshLayout;
     Context mContext;
     ClassicsHeader header;
@@ -82,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initEvent() {
 
+        EventBus.getDefault().register(this);
         mGoodsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -103,6 +108,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void receiveDataUpdate(MessageEvent messageEvent) {
+
+        if(messageEvent.getContext().getClass().isAssignableFrom(SearchActivity.class)) {
+            Log.e("Main", "响应数据更新事件");
+            initData();
+        }
+    }
+
     private void initData() {
         ApiService apiService = RetrofitManager.getInstance().createService(ApiService.class);
         Runnable runnable = new Runnable() {
@@ -119,7 +139,11 @@ public class MainActivity extends AppCompatActivity {
                                 Log.d("返回：","拉取数据成功");
                                 goodsList.clear();
                                 goodsList.addAll(goodsResponseBean.getData());
+                                MyApplication.goodsList = goodsResponseBean.getData();
                                 mGoodsAdapter.notifyDataSetChanged();
+                                //通知SearchActivity更新界面
+                                MessageEvent messageEvent = new MessageEvent("数据更新了",MainActivity.this);
+                                EventBus.getDefault().post(messageEvent);
                                 refreshLayout.finishRefresh(true);
                                 header.setLastUpdateText("产品共计"+goodsList.size()+"种");
                                 if(goodsList.size()>0)
