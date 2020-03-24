@@ -1,40 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
-    android:layout_marginTop="@dimen/dp_10"
+    android:layout_height="100dp"
     android:layout_marginLeft="10dp"
+    android:layout_marginTop="@dimen/dp_10"
     android:layout_marginRight="10dp"
     android:layout_marginBottom="5dp"
     android:background="@drawable/corners_card"
-    android:orientation="vertical"
-    android:id="@+id/rootLayout"
-    android:layout_height="100dp">
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:padding="5dp"
-        android:layout_weight="1"
-        android:layout_marginRight="@dimen/dp_10"
-        android:orientation="horizontal"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:padding="5dp">
 
-    <ImageView
-        android:id="@+id/goods_image"
-        android:layout_marginLeft="16dp"
-        android:layout_gravity="center_vertical|left"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:src="@mipmap/jiaju"
-        />
+        <ImageView
+            android:id="@+id/goods_image"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_vertical|left"
+            android:layout_marginLeft="16dp"
+            android:src="@mipmap/jiaju" />
 
         <TextView
             android:id="@+id/goods_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|left"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@id/goods_image"
             android:gravity="center_vertical|left"
-            android:maxLength="10"
             android:singleLine="true"
             android:text="T3384型号"
             android:textColor="@color/WhiteText"
@@ -42,27 +41,29 @@
 
         <TextView
             android:id="@+id/goods_remain"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
             android:layout_marginLeft="16dp"
-            android:gravity="center|right"
+            android:gravity="center_vertical|right"
             android:maxLength="14"
+            android:layout_marginRight="0dp"
             android:singleLine="true"
             android:text="可售:20件"
             android:textColor="@color/WhiteText"
             android:textSize="17sp" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
-        android:layout_weight="1"
-        android:padding="5dp"
-        android:gravity="center_vertical"
-        android:layout_marginRight="@dimen/dp_10"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="5dp">
 
 
         <TextView
@@ -86,16 +87,15 @@
             android:textSize="13sp" />
 
         <TextView
-            android:textSize="13sp"
-            android:layout_marginTop="3dp"
-            android:gravity="center|right"
-            android:textColor="@color/background_gray"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:gravity="center|right"
             android:singleLine="true"
             android:text="详情 >"
-            android:visibility="invisible"
-            />
+            android:textColor="@color/background_gray"
+            android:textSize="13sp"
+            android:visibility="invisible" />
 
     </LinearLayout>
 
