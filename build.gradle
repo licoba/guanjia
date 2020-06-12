@@ -1,14 +1,13 @@
 buildscript {
     repositories {
-//        mavenCentral()
         google()
         jcenter()
         maven { url "https://jitpack.io" }
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.1'
-        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2' // add plugin
+        classpath 'com.android.tools.build:gradle:4.0.0'
+        classpath 'org.greenrobot:greendao-gradle-plugin:3.3.0' // add plugin
     }
 }
 

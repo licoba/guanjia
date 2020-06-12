@@ -12,7 +12,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitManager {
     private Retrofit mRetrofit;
 //    public static final String BASE_URL = "http://192.168.123.218:3000/";
-    public static final String BASE_URL = "http://67.216.195.108:3000/";
+//    public static final String BASE_URL = "http://67.216.195.108:3000/";
+    public static final String BASE_URL = "http://3216r37107.oicp.vip/"; //mac上虚拟机内网映射的地址
+
 
     //构造器私有，这个工具类只有一个实例
     private RetrofitManager() {

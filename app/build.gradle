@@ -46,8 +46,7 @@ dependencies {
     //自定义Toast控件
     implementation 'com.github.hss01248:Toasty:2.0.4'
     //数据库框架GreenDao
-    implementation 'org.greenrobot:greendao:3.2.2'
-    // add library
+    implementation 'org.greenrobot:greendao:3.3.0'
     //配置greenDAO Gradle插件
     greendao {
         schemaVersion 1
